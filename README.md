@@ -1,3 +1,4 @@
 Amilyen technológiákat használhatnánk:
-Web: Javascript
-Asztali: C#
+Web: Javascript + react
+Asztali: C# (WPF)
+Mobil: Kotlin
