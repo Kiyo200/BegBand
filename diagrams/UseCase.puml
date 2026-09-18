@@ -1,0 +1,112 @@
+@startuml UseCase
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor<<common>> #EFF6FF
+    BackgroundColor<<leader>> #FEF3C7
+    BackgroundColor<<admin>> #FEE2E2
+    BackgroundColor<<member>> #DCFCE7
+    BorderColor #666666
+}
+skinparam actor {
+    BackgroundColor<<leader>> #FEF3C7
+    BorderColor<<leader>> #D97706
+    BackgroundColor<<admin>> #FEE2E2
+    BorderColor<<admin>> #DC2626
+    BackgroundColor<<user>> #DBEAFE
+    BorderColor<<user>> #2563EB
+    BackgroundColor<<member>> #DCFCE7
+    BorderColor<<member>> #16A34A
+}
+
+title BegBand - Use Case diagram
+
+actor "Leader" as Leader <<leader>>
+actor "Admin" as Admin <<admin>>
+actor "User" as User <<user>>
+actor "BandMember" as BandMember <<member>>
+
+rectangle "BegBand" {
+
+    package "Alap funkciók (minden felhasználó)" {
+        usecase "Zene keresése" as UC_ZeneKereses <<common>>
+        usecase "Bandák keresése" as UC_BandakKereses <<common>>
+        usecase "Bandához csatlakozás" as UC_BandaCsatlakozas <<common>>
+        usecase "Banda létrehozása" as UC_BandaLetrehozas <<common>>
+        usecase "Profil szerkesztése" as UC_ProfilSzerk <<common>>
+        usecase "Zene posztolása" as UC_ZenePoszt <<common>>
+        usecase "Eseménynaptár megtekintése" as UC_NaptarMegtekintes <<common>>
+    }
+
+    package "Tartalom-feed (minden felhasználó)" {
+        usecase "Videó posztolása" as UC_VideoPoszt <<common>>
+        usecase "Tartalom kedvelése" as UC_TartalomKedveles <<common>>
+        usecase "Banda követése" as UC_BandaKovetes <<common>>
+        usecase "Feed megtekintése" as UC_FeedMegtekintese <<common>>
+    }
+
+    package "Banda- és próbakezelés (Leader)" {
+        usecase "Banda kezelése" as UC_BandaKezeles <<leader>>
+        usecase "Tagok kezelése" as UC_TagokKezeles <<leader>>
+        usecase "Eseménynaptár kezelése" as UC_NaptarKezeles <<leader>>
+        usecase "Próba létrehozása" as UC_ProbaLetrehozas <<leader>>
+        usecase "Próba kezelése" as UC_ProbaKezeles <<leader>>
+        usecase "Koncert létrehozása" as UC_KoncertLetrehozas <<leader>>
+    }
+
+    package "Csapat áttekintése (BandMember)" {
+        usecase "Banda megtekintése" as UC_BandaMegtekintese <<member>>
+        usecase "Tagok megtekintése" as UC_TagokMegtekintese <<member>>
+        usecase "Próba megtekintése" as UC_ProbaMegtekintes <<member>>
+        usecase "Próba naptár megtekintése" as UC_ProbaNaptárMegtekintes <<member>>
+        usecase "Koncert megtekintése" as UC_KoncertMegtekintese <<member>>
+    }
+
+    package "Adminisztráció (Admin)" {
+        usecase "Userek kezelése" as UC_UserekKezeles <<admin>>
+        usecase "Userek törlése" as UC_UserekTorles <<admin>>
+        usecase "Mindent tud amit a tobbi rang rendelkezik" as UC_AdminMinden <<admin>>
+    }
+}
+
+Leader -[#D97706]-> UC_BandaKezeles
+Leader -[#D97706]-> UC_TagokKezeles
+Leader -[#D97706]-> UC_NaptarKezeles
+Leader -[#D97706]-> UC_ProbaLetrehozas
+Leader -[#D97706]-> UC_ProbaKezeles
+Leader -[#D97706]-> UC_ProbaMegtekintes
+Leader -[#D97706]-> UC_KoncertLetrehozas
+Leader -[#D97706]-> UC_NaptarMegtekintes
+Leader -[#D97706]-> UC_BandaMegtekintese
+Leader -[#D97706]-> UC_TagokMegtekintese
+Leader -[#D97706]-> UC_KoncertMegtekintese
+Leader -[#D97706]-> UC_FeedMegtekintese
+
+Admin -[#DC2626]-> UC_UserekKezeles
+Admin -[#DC2626]-> UC_UserekTorles
+Admin -[#DC2626]-> UC_AdminMinden
+Admin -[#DC2626]-> UC_FeedMegtekintese
+
+UC_ZeneKereses <-[#2563EB]- User
+UC_BandakKereses <-[#2563EB]- User
+UC_BandaCsatlakozas <-[#2563EB]- User
+UC_BandaLetrehozas <-[#2563EB]- User
+UC_ProfilSzerk <-[#2563EB]- User
+UC_ZenePoszt <-[#2563EB]- User
+UC_NaptarMegtekintes <-[#2563EB]- User
+UC_VideoPoszt <-[#2563EB]- User
+UC_TartalomKedveles <-[#2563EB]- User
+UC_BandaKovetes <-[#2563EB]- User
+UC_FeedMegtekintese <-[#2563EB]- User
+
+UC_NaptarMegtekintes <-[#16A34A]- BandMember
+UC_BandaMegtekintese <-[#16A34A]- BandMember
+UC_TagokMegtekintese <-[#16A34A]- BandMember
+UC_ProbaMegtekintes <-[#16A34A]- BandMember
+UC_ProbaNaptárMegtekintes <-[#16A34A]- BandMember
+UC_KoncertMegtekintese <-[#16A34A]- BandMember
+UC_FeedMegtekintese <-[#16A34A]- BandMember
+
+@enduml

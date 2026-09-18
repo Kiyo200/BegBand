@@ -1,0 +1,48 @@
+@startuml Activity
+
+start
+:belépés;
+
+if (van fiók?) then (igen)
+  :bejelentkezés;
+  if (helyes jelszó?) then (igen)
+  else (nem)
+    :hibaüzenet;
+    :belépési folyamat újrakezdése;
+  endif
+else (nem)
+  :regisztráció;
+  if (helyes adatok?) then (igen)
+    :fiók létrehozása;
+  else (nem)
+    :hibaüzenet;
+    :belépési folyamat újrakezdése;
+  endif
+endif
+
+:rang lekérdezése;
+
+repeat
+  :főmenü;
+
+  switch (szerepkör?)
+  case (User)
+    :funkció használata;
+
+  case (Leader)
+    :funkció használata;
+
+  case (BandMember)
+    :funkció használata;
+
+  case (Admin)
+    :funkció használata;
+
+  endswitch
+
+repeat while (folytatod?) is (igen)
+->nem;
+
+:kijelentkezés;
+end
+@enduml
