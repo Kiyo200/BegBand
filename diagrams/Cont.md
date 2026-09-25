@@ -1,4 +1,4 @@
-# BegBand
+# Bandhub
 
 ## Célja
 oylan alkalmazása 

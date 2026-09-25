@@ -1,3 +1,153 @@
-@startuml c4 
+' Bandhub - C4 modell (Context / Container / Component / Deployment)
+' Hivatalos C4-PlantUML sablonkönyvtár (https://github.com/plantuml-stdlib/C4-PlantUML),
+' a PlantUML standard library részeként (<C4/...> include).
+'
+' Ez a fájl a C4 modell KANONIKUS forrása. A diagrams/mermaid/{Context,Container,Component,Deployment}.md
+' fájlok ugyanezt a tartalmat Mermaid-be átírva tartalmazzák, kizárólag GitHub/szerkesztő
+' inline-előnézet céljából (GitHub natívan nem rendereli a PlantUML-t) — a két forrást
+' szinkronban kell tartani, ld. docs/Rendszerdokumentacio.md 4.1.
 
+@startuml C4_Context
+!include <C4/C4_Context>
+
+title Bandhub - Rendszerkontextus
+
+Person(user, "Felhasználó", "Zenész: User / Leader / BandMember / Admin szerepkörben")
+System(bandhub, "Bandhub", "Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása")
+System_Ext(email, "E-mail szolgáltató", "Tranzakciós e-mailek (regisztráció, meghívók, próba-/koncertértesítés) kiküldése, pl. SMTP relay szolgáltatón keresztül")
+
+Rel(user, bandhub, "Regisztrál, bejelentkezik, tartalmat kezel", "HTTPS")
+Rel(bandhub, email, "Értesítő e-maileket küld", "SMTP")
+
+SHOW_LEGEND()
+@enduml
+
+
+@startuml C4_Container
+!include <C4/C4_Container>
+
+title Bandhub - Konténer diagram
+
+Person(user, "Felhasználó", "User / Leader / BandMember / Admin")
+
+System_Boundary(bandhub, "Bandhub rendszer (konténerizált szerveroldal)") {
+    Container(web, "Web kliens", "React + TypeScript (SPA)", "Böngészőből elérhető felhasználói felület")
+    Container(desktop, "Asztali kliens", "C# / WPF", "Windows asztali alkalmazás")
+    Container(mobile, "Mobil kliens", "Kotlin (Android)", "Mobilalkalmazás")
+    Container(nginx, "Reverse proxy", "Nginx", "Web kliens statikus kiszolgálása, API-forgalom proxyzása és TLS-terminálása minden kliens számára")
+    Container(backend, "Backend API", "Java 21 + Spring Boot", "Üzleti logika, jogosultságkezelés (JWT), REST API — közös minden kliens számára")
+    ContainerDb(db, "Adatbázis", "PostgreSQL", "Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai")
+    ContainerDb(storage, "Objektumtár", "MinIO (S3-kompatibilis)", "Feltöltött zene-/videófájlok, borító- és profilképek")
+}
+
+System_Ext(email, "E-mail szolgáltató", "SMTP relay")
+
+Rel(user, web, "Használja", "HTTPS, böngészőből")
+Rel(user, desktop, "Használja")
+Rel(user, mobile, "Használja")
+
+Rel(web, nginx, "Betöltés + API hívások", "HTTPS")
+Rel(desktop, nginx, "API hívások", "REST/JSON, HTTPS")
+Rel(mobile, nginx, "API hívások", "REST/JSON, HTTPS")
+Rel(nginx, backend, "API-hívásokat továbbít", "REST/JSON")
+
+Rel(backend, db, "Olvas / ír", "JDBC/SQL")
+Rel(backend, storage, "Fájl feltöltés / lekérés", "S3 API")
+Rel(backend, email, "Értesítést küld", "SMTP")
+
+SHOW_LEGEND()
+@enduml
+
+
+@startuml C4_Component
+!include <C4/C4_Component>
+
+title Bandhub - Backend API komponensdiagram
+
+Container(client, "Kliens", "Web (React) / Asztali (C#-WPF) / Mobil (Kotlin)", "Bármelyik kliens ugyanazt az API-t hívja")
+Container(nginx, "Reverse proxy", "Nginx", "API-forgalom proxyzása, TLS-terminálás — ld. Container diagram")
+
+Container_Boundary(backend, "Backend API (Java 21 + Spring Boot)") {
+    Component(security, "Security / Auth modul", "Spring Security + JWT", "Bejelentkezés, regisztráció, token kiadás/validálás, szerepkör-alapú jogosultság-ellenőrzés (RBAC)")
+    Component(userSvc, "Felhasználókezelő modul", "Controller/Service/Repository", "Profilszerkesztés, admin: userek kezelése/törlése")
+    Component(bandSvc, "Bandakezelő modul", "Controller/Service/Repository", "Banda létrehozása/keresése/kezelése, tagság (csatlakozás, tagok kezelése), banda-belüli szavazás (poll) létrehozása és kezelése")
+    Component(eventSvc, "Próba-/koncert-/naptármodul", "Controller/Service/Repository", "Próbák és koncertek létrehozása/kezelése/megtekintése, eseménynaptár összesített megjelenítése, eseményre feliratkozás")
+    Component(contentSvc, "Tartalomkezelő modul", "Controller/Service/Repository", "Zene/videó posztolása, keresése, kedvelés, banda- és előadókövetés, személyre szabott feed összeállítása, tartalom mentése kategóriákkal")
+    Component(notifySvc, "Értesítő modul", "Service", "E-mail értesítések összeállítása és küldése (csatlakozási kérelem, meghívó, emlékeztető)")
+}
+
+ContainerDb(db, "Adatbázis", "PostgreSQL")
+ContainerDb(storage, "Objektumtár", "MinIO")
+System_Ext(email, "E-mail szolgáltató", "SMTP relay")
+
+Rel(client, nginx, "REST/JSON", "HTTPS")
+
+Rel(nginx, security, "Bejelentkezés / regisztráció", "REST/JSON")
+Rel(nginx, userSvc, "REST/JSON")
+Rel(nginx, bandSvc, "REST/JSON")
+Rel(nginx, eventSvc, "REST/JSON")
+Rel(nginx, contentSvc, "REST/JSON")
+
+Rel(userSvc, security, "Jogosultság-ellenőrzés")
+Rel(bandSvc, security, "Jogosultság-ellenőrzés")
+Rel(eventSvc, security, "Jogosultság-ellenőrzés")
+Rel(contentSvc, security, "Jogosultság-ellenőrzés")
+
+Rel(eventSvc, notifySvc, "Meghívó / emlékeztető kiváltása")
+Rel(bandSvc, notifySvc, "Tagsági értesítés kiváltása")
+Rel(notifySvc, email, "Küldés", "SMTP")
+
+Rel(contentSvc, storage, "Fájl feltöltés / letöltés", "S3 API")
+
+Rel(security, db, "Olvas/ír", "JDBC/SQL")
+Rel(userSvc, db, "Olvas/ír", "JDBC/SQL")
+Rel(bandSvc, db, "Olvas/ír", "JDBC/SQL")
+Rel(eventSvc, db, "Olvas/ír", "JDBC/SQL")
+Rel(contentSvc, db, "Olvas/ír", "JDBC/SQL")
+
+SHOW_LEGEND()
+@enduml
+
+
+@startuml C4_Deployment
+!include <C4/C4_Deployment>
+
+title Bandhub - Telepítési diagram (éles környezet)
+
+Deployment_Node(userDevice, "Felhasználó eszköze", "Böngésző / Windows PC / Android") {
+    Container(web, "Web kliens", "React (statikus build)", "Böngészőben fut")
+    Container(desktop, "Asztali kliens", "C# / WPF", "Telepített alkalmazás")
+    Container(mobile, "Mobil kliens", "Kotlin", "Telepített alkalmazás")
+}
+
+Deployment_Node(appServer, "Alkalmazásszerver", "Linux + Docker Engine") {
+    Deployment_Node(compose, "Docker Compose stack", "docker-compose.yml") {
+        Deployment_Node(nginxNode, "nginx konténer", "image: nginx:alpine") {
+            Container(nginx, "Reverse proxy", "Nginx", "TLS-terminálás, statikus kiszolgálás, API-proxy")
+        }
+        Deployment_Node(backendNode, "backend konténer", "image: bandhub-backend") {
+            Container(backend, "Backend API", "Java 21 + Spring Boot", "REST API")
+        }
+        Deployment_Node(dbNode, "db konténer", "image: postgres:16") {
+            ContainerDb(db, "Adatbázis", "PostgreSQL", "Perzisztens Docker volume-on")
+        }
+        Deployment_Node(storageNode, "storage konténer", "image: minio/minio") {
+            ContainerDb(storage, "Objektumtár", "MinIO", "Perzisztens Docker volume-on")
+        }
+    }
+}
+
+Deployment_Node(emailInfra, "E-mail szolgáltató infrastruktúrája", "külső, SMTP relay") {
+    System_Ext(email, "E-mail szolgáltató", "Tranzakciós e-mailek kiküldése")
+}
+
+Rel(web, nginx, "Betöltés + API hívások", "HTTPS")
+Rel(desktop, nginx, "API hívások", "REST/JSON, HTTPS")
+Rel(mobile, nginx, "API hívások", "REST/JSON, HTTPS")
+Rel(nginx, backend, "API-hívásokat továbbít", "REST/JSON")
+Rel(backend, db, "Olvas / ír", "JDBC/SQL")
+Rel(backend, storage, "Fájl feltöltés / lekérés", "S3 API")
+Rel(backend, email, "Értesítést küld", "SMTP")
+
+SHOW_LEGEND()
 @enduml

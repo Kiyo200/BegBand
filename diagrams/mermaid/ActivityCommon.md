@@ -147,3 +147,46 @@ flowchart TD
     Tovabbiak --> Megjelenites
     Gorget -- nem --> Vege([Vége])
 ```
+
+## Tartalom mentése
+
+```mermaid
+flowchart TD
+    Start([Start]) --> ElemValasztas[Elem kiválasztása - poszt, banda, előadó vagy esemény]
+    ElemValasztas --> MentesGomb[Mentés gomb megnyomása]
+    MentesGomb --> MarMentve{Már mentve van?}
+    MarMentve -- igen --> Torles[SAVED_ITEM törlése - mentés visszavonása]
+    Torles --> Vege([Vége])
+    MarMentve -- nem --> KategoriaValasztas[Kategória megadása - opcionális]
+    KategoriaValasztas --> UjMentes[SAVED_ITEM létrehozása target_type/target_id és category mezőkkel]
+    UjMentes --> Megjelenes[Elem megjelenik a Mentett elemek listájában]
+    Megjelenes --> Vege
+```
+
+## Eseményre feliratkozás
+
+```mermaid
+flowchart TD
+    Start([Start]) --> EsemenyValasztas[Esemény kiválasztása a naptárban - próba vagy koncert]
+    EsemenyValasztas --> FeliratkozasGomb[Feliratkozás gomb megnyomása]
+    FeliratkozasGomb --> MarFeliratkozott{Már feliratkozott?}
+    MarFeliratkozott -- igen --> Lemondas[EVENT_SIGNUP állapot módosítása - lemondva]
+    Lemondas --> Ertesites2[Visszajelzés a felhasználónak]
+    Ertesites2 --> Vege([Vége])
+    MarFeliratkozott -- nem --> UjFeliratkozas[EVENT_SIGNUP létrehozása - feliratkozva]
+    UjFeliratkozas --> Ertesites1[Visszajelzés a felhasználónak]
+    Ertesites1 --> Vege
+```
+
+## Előadó követése
+
+```mermaid
+flowchart TD
+    Start([Start]) --> EloadoValasztas[Előadó - USER - kiválasztása]
+    EloadoValasztas --> KovetesGomb[Követés gomb megnyomása]
+    KovetesGomb --> MarKoveti{Már követi?}
+    MarKoveti -- igen --> Megszuntetes[Követés megszüntetése - FOLLOW törlése]
+    Megszuntetes --> Vege([Vége])
+    MarKoveti -- nem --> UjKovetes[FOLLOW rekord létrehozása - target_type=eloado]
+    UjKovetes --> Vege
+```

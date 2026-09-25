@@ -12,12 +12,21 @@ erDiagram
     USER ||--o{ POST : "posztol"
     BAND ||--o{ POST : "cimkezve (opcionalis)"
     USER ||--o{ FOLLOW : "kovet"
-    BAND ||--o{ FOLLOW : "kovetoi"
+    BAND ||--o{ FOLLOW : "kovetoi (banda celkent)"
+    USER ||--o{ FOLLOW : "kovetoi (eloado celkent)"
     USER ||--o{ POST_LIKE : "kedvel"
     POST ||--o{ POST_LIKE : "kedvelesei"
+    USER ||--o{ SAVED_ITEM : "ment"
+    CALENDAR_EVENT ||--o{ EVENT_SIGNUP : "feliratkozasai"
+    USER ||--o{ EVENT_SIGNUP : "feliratkozik"
+    BAND ||--o{ POLL : "szavazasai"
+    USER ||--o{ POLL : "letrehozza (leader)"
+    POLL ||--o{ POLL_OPTION : "valasztasi lehetosegei"
+    POLL_OPTION ||--o{ POLL_VOTE : "szavazatai"
+    USER ||--o{ POLL_VOTE : "szavaz"
 ```
 
-A `POST`, `FOLLOW` és `POST_LIKE` entitások a Tartalom-feed (Instagram-szerű videó-/zenefeed) funkciót szolgálják ki — ld. [Rendszerdokumentacio.md 3.2](../../docs/Rendszerdokumentacio.md#sec-3-2) "Tartalom-feed" csomag és [6.1](../../docs/Rendszerdokumentacio.md#sec-6-1). A tényleges PostgreSQL DDL az implementációs fázis feladata; ez a dokumentum a tervezési szintű entitás-/mezőlistát rögzíti.
+A `POST`, `FOLLOW` és `POST_LIKE` entitások a Tartalom-feed (Instagram-szerű videó-/zenefeed) funkciót szolgálják ki — ld. [Rendszerdokumentacio.md 3.2](../../docs/Rendszerdokumentacio.md#sec-3-2) "Tartalom-feed" csomag és [6.1](../../docs/Rendszerdokumentacio.md#sec-6-1). A `SAVED_ITEM`, `EVENT_SIGNUP`, `POLL`/`POLL_OPTION`/`POLL_VOTE` entitások a v0.10-ben bevezetett Tartalom mentése, Eseményre feliratkozás és Banda-belüli szavazás funkciókat szolgálják ki — ld. ugyanott. A tényleges PostgreSQL DDL az implementációs fázis feladata; ez a dokumentum a tervezési szintű entitás-/mezőlistát rögzíti.
 
 ## Entitások mezői
 
@@ -57,10 +66,36 @@ A `POST`, `FOLLOW` és `POST_LIKE` entitások a Tartalom-feed (Instagram-szerű 
 | POST | thumbnail_url | string | opcionális |
 | FOLLOW | id | uuid | |
 | FOLLOW | follower_id | uuid | a követő USER |
-| FOLLOW | band_id | uuid | a követett BAND |
+| FOLLOW | target_type | string | banda / eloado — melyik entitást követi |
+| FOLLOW | target_id | uuid | a követett BAND.id vagy USER.id (előadóként) — a `target_type` szerint |
 | POST_LIKE | id | uuid | |
 | POST_LIKE | user_id | uuid | |
 | POST_LIKE | post_id | uuid | |
+| SAVED_ITEM | id | uuid | |
+| SAVED_ITEM | user_id | uuid | a mentő USER (bármely szerepkör) |
+| SAVED_ITEM | target_type | string | poszt / banda / eloado / esemeny |
+| SAVED_ITEM | target_id | uuid | a mentett elem azonosítója, a `target_type` szerint |
+| SAVED_ITEM | category | string | opcionális, felhasználó által megadott kategória/címke (pl. "Kedvencek") a mentett elemek rendszerezéséhez |
+| SAVED_ITEM | created_at | datetime | |
+| EVENT_SIGNUP | id | uuid | |
+| EVENT_SIGNUP | user_id | uuid | a feliratkozó USER |
+| EVENT_SIGNUP | event_id | uuid | a `CALENDAR_EVENT` (próba/koncert), amelyre a feliratkozás vonatkozik |
+| EVENT_SIGNUP | status | string | feliratkozva / lemondva |
+| EVENT_SIGNUP | created_at | datetime | |
+| POLL | id | uuid | |
+| POLL | band_id | uuid | a banda, amelyen belül a szavazás létrejött |
+| POLL | created_by | uuid | a szavazást létrehozó USER (Leader) |
+| POLL | question | string | a szavazás kérdése/tárgya |
+| POLL | created_at | datetime | |
+| POLL | closes_at | datetime | opcionális, a szavazás lezárási időpontja |
+| POLL_OPTION | id | uuid | |
+| POLL_OPTION | poll_id | uuid | |
+| POLL_OPTION | option_text | string | egy választható opció szövege |
+| POLL_VOTE | id | uuid | |
+| POLL_VOTE | poll_id | uuid | |
+| POLL_VOTE | option_id | uuid | a leadott szavazat szerinti `POLL_OPTION` |
+| POLL_VOTE | user_id | uuid | a szavazó USER (a banda tagja) |
+| POLL_VOTE | voted_at | datetime | |
 
 ## Feed-personalizáció (tervezési javaslat)
 
@@ -70,3 +105,12 @@ A "Feed megtekintése" use case a `POST` entitást adja vissza, felhasználónk�
 3. A `POST_LIKE` alapján számított kedvelésszám másodlagos rendezési szempont (népszerűbb tartalom előrébb).
 
 Ez a personalizáció csak a *sorrendet* befolyásolja — minden felhasználó ugyanazt a tartalomkészletet láthatja, csak más sorrendben (nincs tartalom-kizárás/szűrés az MVP-ben).
+
+## Mentés, követés, feliratkozás és szavazás — kiegészítő megjegyzések (tervezési javaslat)
+
+- **Mentés (`SAVED_ITEM`):** a mentés minden szerepkör (User/Leader/BandMember/Admin) számára elérhető, és tetszőleges célentitásra (poszt, banda, előadó, esemény) vonatkozhat. A `category` mező szabad szöveges, felhasználónkénti csoportosítást tesz lehetővé (pl. "Kedvenc dalok", "Meghívandó zenészek") — nincs előre definiált, rendszerszintű kategórialista.
+- **Követés (`FOLLOW`) kiterjesztése:** a korábbi, kizárólag bandákra vonatkozó követés kiegészült előadók (egyéni USER-ek) követésével; a `target_type`/`target_id` páros teszi lehetővé mindkét célentitást ugyanabban a táblában. A Feed-personalizáció (fent) logikáját a jövőben az előadó-követésre is ki kell terjeszteni (jelenleg csak a banda-követés hat a sorrendre — ld. [Rendszerdokumentacio.md 6.1](../../docs/Rendszerdokumentacio.md#sec-6-1) HELYŐRZŐ).
+- **Eseményre feliratkozás (`EVENT_SIGNUP`):** bármely `CALENDAR_EVENT`-re (próba vagy koncert) vonatkozhat; egy felhasználó és egy esemény között legfeljebb egy aktív (`feliratkozva`) rekord értelmezett.
+- **Szavazás (`POLL`/`POLL_OPTION`/`POLL_VOTE`):** kizárólag egy adott bandán belül értelmezett — a szavazást csak az adott banda Leadere hozhatja létre (`POLL.created_by`), és csak az adott banda tagjai (BandMember és a Leader) szavazhatnak. Egy felhasználó pollonként egy szavazatot adhat le (egyediségi kényszer, implementáció során rögzítendő).
+
+> **HELYŐRZŐ:** a fenti négy új entitás (`SAVED_ITEM`, kiterjesztett `FOLLOW`, `EVENT_SIGNUP`, `POLL`/`POLL_OPTION`/`POLL_VOTE`) jóváhagyása/pontosítása a tényleges adatbázis-tervezéskor; mezőnevek, típusok, megszorítások (pl. `POLL_VOTE` egyediségi kényszer felhasználónként/pollonként) még nem véglegesek.

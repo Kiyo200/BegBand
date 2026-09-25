@@ -13,6 +13,8 @@ flowchart TB
         C5(["Profil szerkesztése"])
         C6(["Zene posztolása"])
         C7(["Eseménynaptár megtekintése"])
+        C8(["Tartalom mentése"])
+        C9(["Eseményre feliratkozás"])
     end
 
     subgraph PKG_Feed["Tartalom-feed (minden felhasználó)"]
@@ -21,6 +23,7 @@ flowchart TB
         F2(["Tartalom kedvelése"])
         F3(["Banda követése"])
         F4(["Feed megtekintése"])
+        F5(["Előadó követése"])
     end
 
     subgraph PKG_Leader["Banda- és próbakezelés (Leader)"]
@@ -31,6 +34,7 @@ flowchart TB
         L4(["Próba létrehozása"])
         L5(["Próba kezelése"])
         L6(["Koncert létrehozása"])
+        L7(["Szavazás létrehozása"])
     end
 
     subgraph PKG_Member["Csapat áttekintése (BandMember)"]
@@ -40,6 +44,7 @@ flowchart TB
         M3(["Próba megtekintése"])
         M4(["Próba naptár megtekintése"])
         M5(["Koncert megtekintése"])
+        M6(["Szavazásban részvétel"])
     end
 
     subgraph PKG_Admin["Adminisztráció (Admin)"]
@@ -54,9 +59,9 @@ flowchart TB
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef adminUC fill:#FEE2E2,stroke:#666666,color:#7f1d1d
 
-    class C1,C2,C3,C4,C5,C6,C7,F1,F2,F3,F4 common
-    class L1,L2,L3,L4,L5,L6 leaderUC
-    class M1,M2,M3,M4,M5 memberUC
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5 common
+    class L1,L2,L3,L4,L5,L6,L7 leaderUC
+    class M1,M2,M3,M4,M5,M6 memberUC
     class A1,A2,A3 adminUC
 ```
 
@@ -75,6 +80,8 @@ flowchart LR
         C5(["Profil szerkesztése"])
         C6(["Zene posztolása"])
         C7(["Eseménynaptár megtekintése"])
+        C8(["Tartalom mentése"])
+        C9(["Eseményre feliratkozás"])
     end
 
     subgraph PKG_Feed["Tartalom-feed (minden felhasználó)"]
@@ -83,6 +90,7 @@ flowchart LR
         F2(["Tartalom kedvelése"])
         F3(["Banda követése"])
         F4(["Feed megtekintése"])
+        F5(["Előadó követése"])
     end
 
     User --> C1
@@ -92,17 +100,20 @@ flowchart LR
     User --> C5
     User --> C6
     User --> C7
+    User --> C8
+    User --> C9
     User --> F1
     User --> F2
     User --> F3
     User --> F4
+    User --> F5
 
     classDef common fill:#EFF6FF,stroke:#666666,color:#1e3a5f
     classDef userActor fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1e3a5f
 
-    class C1,C2,C3,C4,C5,C6,C7,F1,F2,F3,F4 common
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5 common
     class User userActor
-    linkStyle 0,1,2,3,4,5,6,7,8,9,10 stroke:#2563EB,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13 stroke:#2563EB,stroke-width:1.5px
 ```
 
 ## Leader use case-ei
@@ -119,6 +130,7 @@ flowchart LR
         L4(["Próba létrehozása"])
         L5(["Próba kezelése"])
         L6(["Koncert létrehozása"])
+        L7(["Szavazás létrehozása"])
     end
 
     subgraph PKG_Member["Csapat áttekintése (BandMember)"]
@@ -127,16 +139,7 @@ flowchart LR
         M2(["Tagok megtekintése"])
         M3(["Próba megtekintése"])
         M5(["Koncert megtekintése"])
-    end
-
-    subgraph PKG_Common["Alap funkciók (minden felhasználó)"]
-        direction TB
-        C7(["Eseménynaptár megtekintése"])
-    end
-
-    subgraph PKG_Feed["Tartalom-feed (minden felhasználó)"]
-        direction TB
-        F4(["Feed megtekintése"])
+        M6(["Szavazásban részvétel"])
     end
 
     Leader --> L1
@@ -145,21 +148,19 @@ flowchart LR
     Leader --> L4
     Leader --> L5
     Leader --> L6
+    Leader --> L7
     Leader --> M1
     Leader --> M2
     Leader --> M3
     Leader --> M5
-    Leader --> C7
-    Leader --> F4
+    Leader --> M6
 
-    classDef common fill:#EFF6FF,stroke:#666666,color:#1e3a5f
     classDef leaderUC fill:#FEF3C7,stroke:#666666,color:#7c4a03
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef leaderActor fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#7c4a03
 
-    class C7,F4 common
-    class L1,L2,L3,L4,L5,L6 leaderUC
-    class M1,M2,M3,M5 memberUC
+    class L1,L2,L3,L4,L5,L6,L7 leaderUC
+    class M1,M2,M3,M5,M6 memberUC
     class Leader leaderActor
     linkStyle 0,1,2,3,4,5,6,7,8,9,10,11 stroke:#D97706,stroke-width:1.5px
 ```
@@ -177,16 +178,7 @@ flowchart LR
         M3(["Próba megtekintése"])
         M4(["Próba naptár megtekintése"])
         M5(["Koncert megtekintése"])
-    end
-
-    subgraph PKG_Common["Alap funkciók (minden felhasználó)"]
-        direction TB
-        C7(["Eseménynaptár megtekintése"])
-    end
-
-    subgraph PKG_Feed["Tartalom-feed (minden felhasználó)"]
-        direction TB
-        F4(["Feed megtekintése"])
+        M6(["Szavazásban részvétel"])
     end
 
     BandMember --> M1
@@ -194,17 +186,14 @@ flowchart LR
     BandMember --> M3
     BandMember --> M4
     BandMember --> M5
-    BandMember --> C7
-    BandMember --> F4
+    BandMember --> M6
 
-    classDef common fill:#EFF6FF,stroke:#666666,color:#1e3a5f
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef memberActor fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#14532d
 
-    class C7,F4 common
-    class M1,M2,M3,M4,M5 memberUC
+    class M1,M2,M3,M4,M5,M6 memberUC
     class BandMember memberActor
-    linkStyle 0,1,2,3,4,5,6 stroke:#16A34A,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5 stroke:#16A34A,stroke-width:1.5px
 ```
 
 ## Admin use case-ei
@@ -220,22 +209,14 @@ flowchart LR
         A3(["Mindent tud amit a többi rang rendelkezik"])
     end
 
-    subgraph PKG_Feed["Tartalom-feed (minden felhasználó)"]
-        direction TB
-        F4(["Feed megtekintése"])
-    end
-
     Admin --> A1
     Admin --> A2
     Admin --> A3
-    Admin --> F4
 
-    classDef common fill:#EFF6FF,stroke:#666666,color:#1e3a5f
     classDef adminUC fill:#FEE2E2,stroke:#666666,color:#7f1d1d
     classDef adminActor fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,color:#7f1d1d
 
-    class F4 common
     class A1,A2,A3 adminUC
     class Admin adminActor
-    linkStyle 0,1,2,3 stroke:#DC2626,stroke-width:1.5px
+    linkStyle 0,1,2 stroke:#DC2626,stroke-width:1.5px
 ```

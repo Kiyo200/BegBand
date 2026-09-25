@@ -80,3 +80,16 @@ flowchart TD
     Ellenorzes -- nem --> HibaUzenet[Hibaüzenet]
     HibaUzenet --> Adatok
 ```
+
+## Szavazás létrehozása
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Kerdes[Szavazás kérdésének és opcióinak megadása]
+    Kerdes --> Ellenorzes{Legalább 2 opció és helyes adatok?}
+    Ellenorzes -- igen --> Letrehozas[POLL és POLL_OPTION rekordok létrehozása - band_id, created_by=Leader]
+    Letrehozas --> Ertesites[Tagok értesítése az új szavazásról]
+    Ertesites --> Vege([Vége])
+    Ellenorzes -- nem --> HibaUzenet[Hibaüzenet]
+    HibaUzenet --> Kerdes
+```

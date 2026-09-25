@@ -51,3 +51,17 @@ flowchart TD
     Lekerdezes --> Megjelenites[Adatok megjelenítése]
     Megjelenites --> Vege([Vége])
 ```
+
+## Szavazásban részvétel
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Listazas[Banda aktív szavazásainak listázása]
+    Listazas --> Kivalasztas[Szavazás kiválasztása]
+    Kivalasztas --> MarSzavazott{Már szavazott ebben a szavazásban?}
+    MarSzavazott -- igen --> Eredmeny[Eddigi eredmény megjelenítése]
+    Eredmeny --> Vege([Vége])
+    MarSzavazott -- nem --> OpcioValasztas[Opció kiválasztása]
+    OpcioValasztas --> SzavazatMentes[POLL_VOTE létrehozása]
+    SzavazatMentes --> Vege
+```
