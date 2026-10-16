@@ -21,14 +21,14 @@ skinparam actor {
     BorderColor<<member>> #16A34A
 }
 
-title BegBand - Use Case diagram
+title Bandhub - Use Case diagram
 
 actor "Leader" as Leader <<leader>>
 actor "Admin" as Admin <<admin>>
 actor "User" as User <<user>>
 actor "BandMember" as BandMember <<member>>
 
-rectangle "BegBand" {
+rectangle "Bandhub" {
 
     package "Alap funkciók (minden felhasználó)" {
         usecase "Zene keresése" as UC_ZeneKereses <<common>>
@@ -38,6 +38,20 @@ rectangle "BegBand" {
         usecase "Profil szerkesztése" as UC_ProfilSzerk <<common>>
         usecase "Zene posztolása" as UC_ZenePoszt <<common>>
         usecase "Eseménynaptár megtekintése" as UC_NaptarMegtekintes <<common>>
+        usecase "Tartalom mentése" as UC_TartalomMentese <<common>>
+        usecase "Eseményre feliratkozás" as UC_EsemenyFeliratkozas <<common>>
+    }
+
+    package "Tartalom-feed (minden felhasználó)" {
+        usecase "Videó posztolása" as UC_VideoPoszt <<common>>
+        usecase "Tartalom kedvelése" as UC_TartalomKedveles <<common>>
+        usecase "Banda követése" as UC_BandaKovetes <<common>>
+        usecase "Feed megtekintése" as UC_FeedMegtekintese <<common>>
+        usecase "Előadó követése" as UC_EloadoKovetese <<common>>
+    }
+
+    package "Üzenetküldés (minden felhasználó)" {
+        usecase "Privát chat" as UC_PrivatChat <<common>>
     }
 
     package "Banda- és próbakezelés (Leader)" {
@@ -47,6 +61,7 @@ rectangle "BegBand" {
         usecase "Próba létrehozása" as UC_ProbaLetrehozas <<leader>>
         usecase "Próba kezelése" as UC_ProbaKezeles <<leader>>
         usecase "Koncert létrehozása" as UC_KoncertLetrehozas <<leader>>
+        usecase "Szavazás létrehozása" as UC_SzavazasLetrehozas <<leader>>
     }
 
     package "Csapat áttekintése (BandMember)" {
@@ -55,6 +70,8 @@ rectangle "BegBand" {
         usecase "Próba megtekintése" as UC_ProbaMegtekintes <<member>>
         usecase "Próba naptár megtekintése" as UC_ProbaNaptárMegtekintes <<member>>
         usecase "Koncert megtekintése" as UC_KoncertMegtekintese <<member>>
+        usecase "Szavazásban részvétel" as UC_SzavazasReszvetel <<member>>
+        usecase "Banda-chat használata" as UC_BandaChat <<member>>
     }
 
     package "Adminisztráció (Admin)" {
@@ -64,37 +81,45 @@ rectangle "BegBand" {
     }
 }
 
+User -[#2563EB]-> UC_ZeneKereses
+User -[#2563EB]-> UC_BandakKereses
+User -[#2563EB]-> UC_BandaCsatlakozas
+User -[#2563EB]-> UC_BandaLetrehozas
+User -[#2563EB]-> UC_ProfilSzerk
+User -[#2563EB]-> UC_ZenePoszt
+User -[#2563EB]-> UC_NaptarMegtekintes
+User -[#2563EB]-> UC_TartalomMentese
+User -[#2563EB]-> UC_EsemenyFeliratkozas
+User -[#2563EB]-> UC_VideoPoszt
+User -[#2563EB]-> UC_TartalomKedveles
+User -[#2563EB]-> UC_BandaKovetes
+User -[#2563EB]-> UC_EloadoKovetese
+User -[#2563EB]-> UC_FeedMegtekintese
+User -[#2563EB]-> UC_PrivatChat
+
 Leader -[#D97706]-> UC_BandaKezeles
 Leader -[#D97706]-> UC_TagokKezeles
 Leader -[#D97706]-> UC_NaptarKezeles
 Leader -[#D97706]-> UC_ProbaLetrehozas
 Leader -[#D97706]-> UC_ProbaKezeles
-Leader -[#D97706]-> UC_ProbaMegtekintes
 Leader -[#D97706]-> UC_KoncertLetrehozas
-Leader -[#D97706]-> UC_NaptarMegtekintes
-Leader -[#D97706]-> UC_BandaMegtekintese
-Leader -[#D97706]-> UC_TagokMegtekintese
-Leader -[#D97706]-> UC_KoncertMegtekintese
-
-
+Leader -[#D97706]-> UC_SzavazasLetrehozas
 
 Admin -[#DC2626]-> UC_UserekKezeles
 Admin -[#DC2626]-> UC_UserekTorles
 Admin -[#DC2626]-> UC_AdminMinden
 
-UC_ZeneKereses <-[#2563EB]- User
-UC_BandakKereses <-[#2563EB]- User
-UC_BandaCsatlakozas <-[#2563EB]- User
-UC_BandaLetrehozas <-[#2563EB]- User
-UC_ProfilSzerk <-[#2563EB]- User
-UC_ZenePoszt <-[#2563EB]- User
-UC_NaptarMegtekintes <-[#2563EB]- User
+BandMember -[#16A34A]-> UC_BandaMegtekintese
+BandMember -[#16A34A]-> UC_TagokMegtekintese
+BandMember -[#16A34A]-> UC_ProbaMegtekintes
+BandMember -[#16A34A]-> UC_ProbaNaptárMegtekintes
+BandMember -[#16A34A]-> UC_KoncertMegtekintese
+BandMember -[#16A34A]-> UC_SzavazasReszvetel
+BandMember -[#16A34A]-> UC_BandaChat
 
-UC_NaptarMegtekintes <-[#16A34A]- BandMember
-UC_BandaMegtekintese <-[#16A34A]- BandMember
-UC_TagokMegtekintese <-[#16A34A]- BandMember
-UC_ProbaMegtekintes <-[#16A34A]- BandMember
-UC_ProbaNaptárMegtekintes <-[#16A34A]- BandMember
-UC_KoncertMegtekintese <-[#16A34A]- BandMember
+' Szerepkör-öröklés: minden actor tartalmazza az "ős" összes use case-ét is
+BandMember -[#999999,dashed]-|> User
+Leader -[#999999,dashed]-|> BandMember
+Admin -[#999999,dashed]-|> Leader
 
 @enduml
