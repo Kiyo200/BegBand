@@ -26,6 +26,11 @@ flowchart TB
         F5(["Előadó követése"])
     end
 
+    subgraph PKG_Chat["Üzenetküldés (minden felhasználó)"]
+        direction TB
+        CH1(["Privát chat"])
+    end
+
     subgraph PKG_Leader["Banda- és próbakezelés (Leader)"]
         direction TB
         L1(["Banda kezelése"])
@@ -45,6 +50,7 @@ flowchart TB
         M4(["Próba naptár megtekintése"])
         M5(["Koncert megtekintése"])
         M6(["Szavazásban részvétel"])
+        M7(["Banda-chat használata"])
     end
 
     subgraph PKG_Admin["Adminisztráció (Admin)"]
@@ -59,9 +65,9 @@ flowchart TB
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef adminUC fill:#FEE2E2,stroke:#666666,color:#7f1d1d
 
-    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5 common
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5,CH1 common
     class L1,L2,L3,L4,L5,L6,L7 leaderUC
-    class M1,M2,M3,M4,M5,M6 memberUC
+    class M1,M2,M3,M4,M5,M6,M7 memberUC
     class A1,A2,A3 adminUC
 ```
 
@@ -93,6 +99,11 @@ flowchart LR
         F5(["Előadó követése"])
     end
 
+    subgraph PKG_Chat["Üzenetküldés (minden felhasználó)"]
+        direction TB
+        CH1(["Privát chat"])
+    end
+
     User --> C1
     User --> C2
     User --> C3
@@ -107,13 +118,14 @@ flowchart LR
     User --> F3
     User --> F4
     User --> F5
+    User --> CH1
 
     classDef common fill:#EFF6FF,stroke:#666666,color:#1e3a5f
     classDef userActor fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1e3a5f
 
-    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5 common
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5,CH1 common
     class User userActor
-    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13 stroke:#2563EB,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 stroke:#2563EB,stroke-width:1.5px
 ```
 
 ## Leader use case-ei
@@ -140,6 +152,7 @@ flowchart LR
         M3(["Próba megtekintése"])
         M5(["Koncert megtekintése"])
         M6(["Szavazásban részvétel"])
+        M7(["Banda-chat használata"])
     end
 
     Leader --> L1
@@ -154,15 +167,16 @@ flowchart LR
     Leader --> M3
     Leader --> M5
     Leader --> M6
+    Leader --> M7
 
     classDef leaderUC fill:#FEF3C7,stroke:#666666,color:#7c4a03
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef leaderActor fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#7c4a03
 
     class L1,L2,L3,L4,L5,L6,L7 leaderUC
-    class M1,M2,M3,M5,M6 memberUC
+    class M1,M2,M3,M5,M6,M7 memberUC
     class Leader leaderActor
-    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11 stroke:#D97706,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12 stroke:#D97706,stroke-width:1.5px
 ```
 
 ## BandMember use case-ei
@@ -179,6 +193,7 @@ flowchart LR
         M4(["Próba naptár megtekintése"])
         M5(["Koncert megtekintése"])
         M6(["Szavazásban részvétel"])
+        M7(["Banda-chat használata"])
     end
 
     BandMember --> M1
@@ -187,13 +202,14 @@ flowchart LR
     BandMember --> M4
     BandMember --> M5
     BandMember --> M6
+    BandMember --> M7
 
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef memberActor fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#14532d
 
-    class M1,M2,M3,M4,M5,M6 memberUC
+    class M1,M2,M3,M4,M5,M6,M7 memberUC
     class BandMember memberActor
-    linkStyle 0,1,2,3,4,5 stroke:#16A34A,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6 stroke:#16A34A,stroke-width:1.5px
 ```
 
 ## Admin use case-ei

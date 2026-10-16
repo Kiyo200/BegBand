@@ -50,6 +50,10 @@ rectangle "Bandhub" {
         usecase "Előadó követése" as UC_EloadoKovetese <<common>>
     }
 
+    package "Üzenetküldés (minden felhasználó)" {
+        usecase "Privát chat" as UC_PrivatChat <<common>>
+    }
+
     package "Banda- és próbakezelés (Leader)" {
         usecase "Banda kezelése" as UC_BandaKezeles <<leader>>
         usecase "Tagok kezelése" as UC_TagokKezeles <<leader>>
@@ -67,6 +71,7 @@ rectangle "Bandhub" {
         usecase "Próba naptár megtekintése" as UC_ProbaNaptárMegtekintes <<member>>
         usecase "Koncert megtekintése" as UC_KoncertMegtekintese <<member>>
         usecase "Szavazásban részvétel" as UC_SzavazasReszvetel <<member>>
+        usecase "Banda-chat használata" as UC_BandaChat <<member>>
     }
 
     package "Adminisztráció (Admin)" {
@@ -90,6 +95,7 @@ User -[#2563EB]-> UC_TartalomKedveles
 User -[#2563EB]-> UC_BandaKovetes
 User -[#2563EB]-> UC_EloadoKovetese
 User -[#2563EB]-> UC_FeedMegtekintese
+User -[#2563EB]-> UC_PrivatChat
 
 Leader -[#D97706]-> UC_BandaKezeles
 Leader -[#D97706]-> UC_TagokKezeles
@@ -109,6 +115,7 @@ BandMember -[#16A34A]-> UC_ProbaMegtekintes
 BandMember -[#16A34A]-> UC_ProbaNaptárMegtekintes
 BandMember -[#16A34A]-> UC_KoncertMegtekintese
 BandMember -[#16A34A]-> UC_SzavazasReszvetel
+BandMember -[#16A34A]-> UC_BandaChat
 
 ' Szerepkör-öröklés: minden actor tartalmazza az "ős" összes use case-ét is
 BandMember -[#999999,dashed]-|> User

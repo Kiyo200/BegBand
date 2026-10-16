@@ -12,9 +12,9 @@ flowchart TD
         web["<b>Web kliens</b><br/><i>React + TypeScript (SPA)</i><br/>Böngészőből elérhető felhasználói felület"]
         desktop["<b>Asztali kliens</b><br/><i>C# / WPF</i><br/>Windows asztali alkalmazás"]
         mobile["<b>Mobil kliens</b><br/><i>Kotlin (Android)</i><br/>Mobilalkalmazás"]
-        nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>Web kliens statikus kiszolgálása, API-forgalom proxyzása és TLS-terminálása minden kliens számára"]
-        backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>Üzleti logika, jogosultságkezelés (JWT), REST API — közös minden kliens számára"]
-        db[("<b>Adatbázis</b><br/><i>PostgreSQL</i><br/>Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai")]
+        nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>Web kliens statikus kiszolgálása, API- és WebSocket-forgalom proxyzása, TLS-terminálás minden kliens számára"]
+        backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>Üzleti logika, jogosultságkezelés (JWT), REST API és WebSocket (chat) — közös minden kliens számára"]
+        db[("<b>Adatbázis</b><br/><i>PostgreSQL</i><br/>Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai, chat-üzenetek")]
         storage[("<b>Objektumtár</b><br/><i>MinIO (S3-kompatibilis)</i><br/>Feltöltött zene-/videófájlok, borító- és profilképek")]
     end
 
@@ -24,10 +24,10 @@ flowchart TD
     user -->|"Használja"| desktop
     user -->|"Használja"| mobile
 
-    web -->|"Betöltés + API hívások<br/>[HTTPS]"| nginx
-    desktop -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    mobile -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON]"| backend
+    web -->|"Betöltés + API hívások + chat<br/>[HTTPS, WSS]"| nginx
+    desktop -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    mobile -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON, WebSocket]"| backend
 
     backend -->|"Olvas / ír<br/>[JDBC/SQL]"| db
     backend -->|"Fájl feltöltés / lekérés<br/>[S3 API]"| storage

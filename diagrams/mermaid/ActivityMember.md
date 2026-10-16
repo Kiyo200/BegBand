@@ -1,6 +1,6 @@
 # Activity diagramok — Csapat áttekintése (BandMember)
 
-Az alábbi diagramok a [`UseCase.md`](UseCase.md) "Csapat áttekintése (BandMember)" csomagjának minden use case-éhez tartozó tevékenységfolyamatot mutatják be. Ezek a use case-ek egyszerű, olvasás jellegű (megtekintés) folyamatok.
+Az alábbi diagramok a [`UseCase.md`](UseCase.md) "Csapat áttekintése (BandMember)" csomagjának minden use case-éhez tartozó tevékenységfolyamatot mutatják be. Ezek többnyire egyszerű, olvasás jellegű (megtekintés) folyamatok; a Szavazásban részvétel és a Banda-chat használata írási műveletet is tartalmaz.
 
 ## Banda megtekintése
 
@@ -64,4 +64,19 @@ flowchart TD
     MarSzavazott -- nem --> OpcioValasztas[Opció kiválasztása]
     OpcioValasztas --> SzavazatMentes[POLL_VOTE létrehozása]
     SzavazatMentes --> Vege
+```
+
+## Banda-chat használata
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Megnyitas[Banda adatlap - Chat fül megnyitása]
+    Megnyitas --> AktivTag{Aktív tagja a bandának?}
+    AktivTag -- nem --> Elutasitas[Hozzáférés megtagadva]
+    Elutasitas --> Vege([Vége])
+    AktivTag -- igen --> Elozmenyek[Banda-chat előzményeinek betöltése]
+    Elozmenyek --> Iras[Üzenet írása és küldése]
+    Iras --> Mentes[MESSAGE mentése]
+    Mentes --> Kezbesites[Kézbesítés a banda összes online tagjának]
+    Kezbesites --> Vege
 ```

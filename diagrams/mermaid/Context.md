@@ -7,7 +7,7 @@
 ```mermaid
 flowchart TD
     user["<b>Felhasználó</b><br/><i>Person</i><br/>Zenész: User / Leader / BandMember / Admin szerepkörben"]
-    bandhub["<b>Bandhub</b><br/><i>Software System</i><br/>Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása"]
+    bandhub["<b>Bandhub</b><br/><i>Software System</i><br/>Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása, privát és banda-chat"]
     email["<b>E-mail szolgáltató</b><br/><i>Software System - külső</i><br/>Tranzakciós e-mailek (regisztráció, meghívók, próba-/koncertértesítés) kiküldése, pl. SMTP relay szolgáltatón keresztül"]
 
     user -->|"Regisztrál, bejelentkezik, bandákat/próbákat/koncerteket kezel, tartalmat oszt meg<br/>[HTTPS]"| bandhub

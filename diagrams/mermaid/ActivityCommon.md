@@ -1,6 +1,6 @@
-# Activity diagramok — Alap funkciók és Tartalom-feed (minden felhasználó)
+# Activity diagramok — Alap funkciók, Tartalom-feed és Üzenetküldés (minden felhasználó)
 
-Az alábbi diagramok a [`UseCase.md`](UseCase.md) "Alap funkciók" és "Tartalom-feed" csomagjának minden use case-éhez tartozó tevékenységfolyamatot mutatják be, a meglévő [`Activity.md`](Activity.md) stílusával összhangban.
+Az alábbi diagramok a [`UseCase.md`](UseCase.md) "Alap funkciók", "Tartalom-feed" és "Üzenetküldés" csomagjának minden use case-éhez tartozó tevékenységfolyamatot mutatják be, a meglévő [`Activity.md`](Activity.md) stílusával összhangban.
 
 ## Zene keresése
 
@@ -189,4 +189,24 @@ flowchart TD
     Megszuntetes --> Vege([Vége])
     MarKoveti -- nem --> UjKovetes[FOLLOW rekord létrehozása - target_type=eloado]
     UjKovetes --> Vege
+```
+
+## Privát chat
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Cimzett[Felhasználó kiválasztása - profilról vagy keresésből]
+    Cimzett --> VanMar{Van már közös privát beszélgetés?}
+    VanMar -- igen --> Megnyitas[Meglévő beszélgetés megnyitása]
+    VanMar -- nem --> Letrehozas["CONVERSATION létrehozása (type=privat) + 2 résztvevő"]
+    Letrehozas --> Megnyitas
+    Megnyitas --> Elozmenyek[Előzmények betöltése lapozva, last_read_at frissítése]
+    Elozmenyek --> Iras[Üzenet írása]
+    Iras --> Ures{Üres az üzenet?}
+    Ures -- igen --> Iras
+    Ures -- nem --> Mentes[MESSAGE mentése]
+    Mentes --> Kezbesites[Valós idejű kézbesítés a címzettnek, ha online]
+    Kezbesites --> IrMeg{Ír még?}
+    IrMeg -- igen --> Iras
+    IrMeg -- nem --> Vege([Vége])
 ```

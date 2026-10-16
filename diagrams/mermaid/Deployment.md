@@ -15,10 +15,10 @@ flowchart TD
     subgraph appServer["Alkalmazásszerver [Linux + Docker Engine]"]
         subgraph compose["Docker Compose stack [docker-compose.yml]"]
             subgraph nginxNode["nginx konténer [image: nginx:alpine]"]
-                nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>TLS-terminálás, statikus kiszolgálás, API-proxy"]
+                nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>TLS-terminálás, statikus kiszolgálás, API- és WebSocket-proxy"]
             end
             subgraph backendNode["backend konténer [image: bandhub-backend]"]
-                backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>REST API"]
+                backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>REST API + WebSocket (chat)"]
             end
             subgraph dbNode["db konténer [image: postgres:16]"]
                 db[("<b>Adatbázis</b><br/><i>PostgreSQL</i><br/>Perzisztens Docker volume-on")]
@@ -33,10 +33,10 @@ flowchart TD
         email["<b>E-mail szolgáltató</b><br/><i>Software System - külső</i><br/>Tranzakciós e-mailek kiküldése"]
     end
 
-    web -->|"Betöltés + API hívások<br/>[HTTPS]"| nginx
-    desktop -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    mobile -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON]"| backend
+    web -->|"Betöltés + API hívások + chat<br/>[HTTPS, WSS]"| nginx
+    desktop -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    mobile -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON, WebSocket]"| backend
     backend -->|"Olvas / ír<br/>[JDBC/SQL]"| db
     backend -->|"Fájl feltöltés / lekérés<br/>[S3 API]"| storage
     backend -->|"Értesítést küld<br/>[SMTP]"| email

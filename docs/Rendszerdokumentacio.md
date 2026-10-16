@@ -4,7 +4,7 @@
 > - **Tény** — közvetlenül a meglévő diagramokból vagy a `Cont.md`-ből levezethető állítás.
 > - **Ajánlott architektúra / tervezési javaslat** — a projekt ismert kontextusa (Java backend, konténerizált futtatás, a csapat által felvetett kliens platform-opciók — Web/React, Asztali/C#-WPF, Mobil/Kotlin —, a use case- és tevékenységdiagramok funkciói) és iparági bevált gyakorlat (a [C4 modell](https://c4model.com) hivatalos konvenciói, hivatalos [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML) könyvtár) alapján megfogalmazott, konkrét, jóváhagyást igénylő javaslat (ld. [16.3](#sec-16-3) v0.7–v0.9). Ezek **nem véglegesített döntések**, és nem tartalmaznak kitalált projektadatot (pl. konkrét cégnevet, valós számadatot) — ahol ilyen adat szükséges lenne, ott továbbra is **HELYŐRZŐ** jelölés szerepel.
 >
-> **Verzió:** 0.15 (C4 Mermaid-diagramok `flowchart`-ra átírva — végleges olvashatósági javítás) &nbsp;|&nbsp; **Dátum:** 2026-09-24 &nbsp;|&nbsp; **Szerző:** HELYŐRZŐ (dokumentum gazdája)
+> **Verzió:** 0.16 (Privát és banda-chat) &nbsp;|&nbsp; **Dátum:** 2026-10-01 &nbsp;|&nbsp; **Szerző:** HELYŐRZŐ (dokumentum gazdája)
 
 ---
 
@@ -77,7 +77,7 @@ A dokumentum hatóköre a teljes Bandhub rendszerre terjed ki (backend, kliensek
 - [`diagrams/UseCase.puml`](../diagrams/UseCase.puml) / [`diagrams/mermaid/UseCase.md`](../diagrams/mermaid/UseCase.md)
 - [`diagrams/Activity.puml`](../diagrams/Activity.puml) / [`diagrams/mermaid/Activity.md`](../diagrams/mermaid/Activity.md)
 - [`diagrams/c4.puml`](../diagrams/c4.puml) *(üres forrás)* / [`diagrams/mermaid/Context.md`](../diagrams/mermaid/Context.md), [`diagrams/mermaid/Container.md`](../diagrams/mermaid/Container.md) *(tervezési javaslatok, index: [`diagrams/mermaid/c4.md`](../diagrams/mermaid/c4.md))*
-- [`diagrams/mermaid/Adatmodell.md`](../diagrams/mermaid/Adatmodell.md), [`diagrams/mermaid/TagsagAllapota.md`](../diagrams/mermaid/TagsagAllapota.md), [`diagrams/mermaid/BandaLetrehozasa.md`](../diagrams/mermaid/BandaLetrehozasa.md), [`diagrams/mermaid/ProbaLetrehozasa.md`](../diagrams/mermaid/ProbaLetrehozasa.md) *(új, tervezési javaslat diagramok, nincs PlantUML forrásuk)*
+- [`diagrams/mermaid/Adatmodell.md`](../diagrams/mermaid/Adatmodell.md), [`diagrams/mermaid/TagsagAllapota.md`](../diagrams/mermaid/TagsagAllapota.md), [`diagrams/mermaid/BandaLetrehozasa.md`](../diagrams/mermaid/BandaLetrehozasa.md), [`diagrams/mermaid/ProbaLetrehozasa.md`](../diagrams/mermaid/ProbaLetrehozasa.md), [`diagrams/mermaid/UzenetKuldes.md`](../diagrams/mermaid/UzenetKuldes.md) *(új, tervezési javaslat diagramok, nincs PlantUML forrásuk)*
 - [`diagrams/mermaid/ActivityCommon.md`](../diagrams/mermaid/ActivityCommon.md), [`diagrams/mermaid/ActivityLeader.md`](../diagrams/mermaid/ActivityLeader.md), [`diagrams/mermaid/ActivityMember.md`](../diagrams/mermaid/ActivityMember.md), [`diagrams/mermaid/ActivityAdmin.md`](../diagrams/mermaid/ActivityAdmin.md) — use case-enkénti tevékenységdiagramok (ld. [7.2](#sec-7-2))
 
 ---
@@ -92,7 +92,7 @@ A dokumentum hatóköre a teljes Bandhub rendszerre terjed ki (backend, kliensek
 
 A Bandhub egy zenekarok (bandák) szervezését, működését és a kapcsolódó eseményeket (próbák, koncertek) támogató alkalmazás, amely lehetővé teszi zenészek számára bandák létrehozását/megtalálását, a tagság kezelését, valamint a zenei tartalmak és események megosztását. *(Tény — a use case diagram funkciói alapján.)*
 
-**Tervezési javaslat (a funkciókészletből levezetve):** a rendszer azt a problémát célozza megoldani, hogy egy zenekar szervezése ma jellemzően szét van szórva (üzenetküldő alkalmazások, papíralapú/naptáras egyeztetés, külön zenei megosztó felületek) — a Bandhub egy helyen fogja össze a banda tagságát, a próba-/koncertütemezést és a zenei tartalom megosztását, egyetlen szerepkör-alapú platformon.
+**Tervezési javaslat (a funkciókészletből levezetve):** a rendszer azt a problémát célozza megoldani, hogy egy zenekar szervezése ma jellemzően szét van szórva (üzenetküldő alkalmazások, papíralapú/naptáras egyeztetés, külön zenei megosztó felületek) — a Bandhub egy helyen fogja össze a banda tagságát, a belső kommunikációt (privát és banda-chat), a próba-/koncertütemezést és a zenei tartalom megosztását, egyetlen szerepkör-alapú platformon.
 
 > **HELYŐRZŐ:** a pontos, terméktulajdonos által megfogalmazott célmeghatározás és piaci kontextus a [`diagrams/Cont.md`](../diagrams/Cont.md) fájlban jelenleg csak vázlatosan szerepel ("oylan alkalmazása") — a fenti javaslatot egyeztetni kell a terméktulajdonossal.
 
@@ -104,9 +104,9 @@ A use case diagram alapján a rendszer négy szerepkört különböztet meg:
 
 | Szerepkör | Leírás |
 |---|---|
-| **User** | Alapfelhasználó — zenét kereshet, bandákat/előadókat kereshet, követhet és bandához csatlakozhat, bandát hozhat létre, szerkesztheti a profilját, zenét posztolhat, megtekintheti az eseménynaptárat, feliratkozhat eseményekre, és tartalmat (posztot, bandát, előadót, eseményt) menthet, opcionálisan kategóriákba rendezve. |
-| **Leader** | Banda vezetője — a banda és a tagok kezelése, próbák és koncertek létrehozása/kezelése, eseménynaptár kezelése, a banda tagjai számára szavazás létrehozása (pl. dalválasztás, időpont-egyeztetés), valamint a User és BandMember jogosultságok egy részének öröklése. |
-| **BandMember** | Banda tagja — a saját banda, a tagok, a próbák és koncertek megtekintése, próba naptár megtekintése, valamint részvétel a Leader által létrehozott szavazásokon. |
+| **User** | Alapfelhasználó — zenét kereshet, bandákat/előadókat kereshet, követhet és bandához csatlakozhat, bandát hozhat létre, szerkesztheti a profilját, zenét posztolhat, megtekintheti az eseménynaptárat, feliratkozhat eseményekre, és tartalmat (posztot, bandát, előadót, eseményt) menthet, opcionálisan kategóriákba rendezve, valamint privát (1:1) chatben üzenhet más felhasználóknak. |
+| **Leader** | Banda vezetője — a banda és a tagok kezelése, próbák és koncertek létrehozása/kezelése, eseménynaptár kezelése, a banda tagjai számára szavazás létrehozása (pl. dalválasztás, időpont-egyeztetés), a banda-chat moderálása (üzenetek törlése), valamint a User és BandMember jogosultságok egy részének öröklése. |
+| **BandMember** | Banda tagja — a saját banda, a tagok, a próbák és koncertek megtekintése, próba naptár megtekintése, részvétel a Leader által létrehozott szavazásokon, valamint a banda közös chatjének (Banda-chat) használata. |
 | **Admin** | Rendszergazda — felhasználók kezelése/törlése, valamint minden más szerepkör jogosultságával rendelkezik. |
 
 <a id="sec-2-3"></a>
@@ -121,9 +121,10 @@ A use case diagram alapján a rendszer négy szerepkört különböztet meg:
 - **Tartalom mentése kategóriákkal** — bármely szerepkör elmenthet posztot, bandát, előadót vagy eseményt egy saját, opcionálisan kategorizált mentési listába (ld. [3.2](#sec-3-2))
 - **Eseményre feliratkozás** — részvételi szándék jelzése egy próbára/koncertre (ld. [3.2](#sec-3-2))
 - **Banda-belüli szavazás** — a Leader szavazást hozhat létre a banda tagjainak (pl. dalválasztás, időpont-egyeztetés), a tagok szavazhatnak (ld. [3.2](#sec-3-2))
+- **Privát és banda-chat** — valós idejű (WebSocket) üzenetküldés két felhasználó között, valamint a csoportos beszélgetés egyetlen formájaként minden bandához automatikusan létrejövő, a tagsággal szinkronizált Banda-chatben (ld. [3.2](#sec-3-2), [6.1](#sec-6-1))
 - Szerepkör-alapú hozzáférés (User / Leader / BandMember / Admin)
 
-> **HELYŐRZŐ:** további tervezett funkciók (pl. üzenetküldés, fájlmegosztás, push-/e-mail-értesítések, fizetés/jegyértékesítés stb.) — a jelenlegi diagramok ezekről nem tartalmaznak információt, bevezetésük esetén itt és a use case diagramon is dokumentálandó.
+> **HELYŐRZŐ:** további tervezett funkciók (pl. fájlmegosztás — a chatben is —, push-/e-mail-értesítések, fizetés/jegyértékesítés stb.) — a jelenlegi diagramok ezekről nem tartalmaznak információt, bevezetésük esetén itt és a use case diagramon is dokumentálandó.
 
 ---
 
@@ -139,6 +140,7 @@ A use case diagram alapján a rendszer négy szerepkört különböztet meg:
 - Egyszerűsíteni a bandák megalakulását és a tagok toborzását (banda keresése/létrehozása/csatlakozás funkciók).
 - Csökkenteni a próbák és koncertek szervezésével járó egyeztetési terhet egy közös eseménynaptárral.
 - Egy helyre gyűjteni a banda zenei tartalmait (zene posztolása/keresése).
+- Kiváltani a banda külső üzenetküldő alkalmazásokban (pl. csoportos chatekben) zajló kommunikációját egy, a tagsággal automatikusan szinkronizált Banda-chattel, valamint privát (1:1) beszélgetésekkel.
 - Egyértelmű, szerepkör szerinti felelősségi köröket biztosítani (User / Leader / BandMember / Admin), hogy a banda vezetője és tagjai csak a rájuk vonatkozó funkciókat lássák.
 
 > **HELYŐRZŐ:** konkrét üzleti KPI-ok és sikerkritériumok (pl. célzott felhasználó-/bandaszám, aktivitási mutatók, bevételi modell) — ezek a jelenlegi forrásanyagokból nem vezethetők le, egyeztetés szükséges az érdekeltekkel/terméktulajdonossal.
@@ -175,6 +177,11 @@ flowchart TB
         F5(["Előadó követése"])
     end
 
+    subgraph PKG_Chat["Üzenetküldés (minden felhasználó)"]
+        direction TB
+        CH1(["Privát chat"])
+    end
+
     subgraph PKG_Leader["Banda- és próbakezelés (Leader)"]
         direction TB
         L1(["Banda kezelése"])
@@ -194,6 +201,7 @@ flowchart TB
         M4(["Próba naptár megtekintése"])
         M5(["Koncert megtekintése"])
         M6(["Szavazásban részvétel"])
+        M7(["Banda-chat használata"])
     end
 
     subgraph PKG_Admin["Adminisztráció (Admin)"]
@@ -208,9 +216,9 @@ flowchart TB
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef adminUC fill:#FEE2E2,stroke:#666666,color:#7f1d1d
 
-    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5 common
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5,CH1 common
     class L1,L2,L3,L4,L5,L6,L7 leaderUC
-    class M1,M2,M3,M4,M5,M6 memberUC
+    class M1,M2,M3,M4,M5,M6,M7 memberUC
     class A1,A2,A3 adminUC
 ```
 
@@ -242,6 +250,11 @@ flowchart LR
         F5(["Előadó követése"])
     end
 
+    subgraph PKG_Chat["Üzenetküldés (minden felhasználó)"]
+        direction TB
+        CH1(["Privát chat"])
+    end
+
     User --> C1
     User --> C2
     User --> C3
@@ -256,13 +269,14 @@ flowchart LR
     User --> F3
     User --> F4
     User --> F5
+    User --> CH1
 
     classDef common fill:#EFF6FF,stroke:#666666,color:#1e3a5f
     classDef userActor fill:#DBEAFE,stroke:#2563EB,stroke-width:2px,color:#1e3a5f
 
-    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5 common
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9,F1,F2,F3,F4,F5,CH1 common
     class User userActor
-    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13 stroke:#2563EB,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 stroke:#2563EB,stroke-width:1.5px
 ```
 
 **Leader use case-ei:**
@@ -289,6 +303,7 @@ flowchart LR
         M3(["Próba megtekintése"])
         M5(["Koncert megtekintése"])
         M6(["Szavazásban részvétel"])
+        M7(["Banda-chat használata"])
     end
 
     Leader --> L1
@@ -303,15 +318,16 @@ flowchart LR
     Leader --> M3
     Leader --> M5
     Leader --> M6
+    Leader --> M7
 
     classDef leaderUC fill:#FEF3C7,stroke:#666666,color:#7c4a03
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef leaderActor fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#7c4a03
 
     class L1,L2,L3,L4,L5,L6,L7 leaderUC
-    class M1,M2,M3,M5,M6 memberUC
+    class M1,M2,M3,M5,M6,M7 memberUC
     class Leader leaderActor
-    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11 stroke:#D97706,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12 stroke:#D97706,stroke-width:1.5px
 ```
 
 **BandMember use case-ei:**
@@ -328,6 +344,7 @@ flowchart LR
         M4(["Próba naptár megtekintése"])
         M5(["Koncert megtekintése"])
         M6(["Szavazásban részvétel"])
+        M7(["Banda-chat használata"])
     end
 
     BandMember --> M1
@@ -336,13 +353,14 @@ flowchart LR
     BandMember --> M4
     BandMember --> M5
     BandMember --> M6
+    BandMember --> M7
 
     classDef memberUC fill:#DCFCE7,stroke:#666666,color:#14532d
     classDef memberActor fill:#DCFCE7,stroke:#16A34A,stroke-width:2px,color:#14532d
 
-    class M1,M2,M3,M4,M5,M6 memberUC
+    class M1,M2,M3,M4,M5,M6,M7 memberUC
     class BandMember memberActor
-    linkStyle 0,1,2,3,4,5 stroke:#16A34A,stroke-width:1.5px
+    linkStyle 0,1,2,3,4,5,6 stroke:#16A34A,stroke-width:1.5px
 ```
 
 **Admin use case-ei:**
@@ -370,7 +388,7 @@ flowchart LR
     linkStyle 0,1,2 stroke:#DC2626,stroke-width:1.5px
 ```
 
-> **Megjegyzés — szerepkör-öröklés:** a Leader, BandMember és Admin szereplőnkénti diagramja csak a szerepkörhöz *közvetlenül* tartozó use case-eket mutatja (a katalógusban is jelölt csomagja szerint); a "minden felhasználó" szintű funkciókat (Alap funkciók, Tartalom-feed) — a kanonikus [`diagrams/UseCase.puml`](../diagrams/UseCase.puml) forrással megegyezően — nem ismétlik meg, hanem a BandMember ⊳ User, Leader ⊳ BandMember, Admin ⊳ Leader szerepkör-öröklés biztosítja azokat (ld. [3.3](#sec-3-3) mátrix, ahol ez explicit ✔-ként szerepel). A User diagramja emiatt kivétel: mivel nincs "őse", minden hozzá tartozó use case explicit szerepel rajta.
+> **Megjegyzés — szerepkör-öröklés:** a Leader, BandMember és Admin szereplőnkénti diagramja csak a szerepkörhöz *közvetlenül* tartozó use case-eket mutatja (a katalógusban is jelölt csomagja szerint); a "minden felhasználó" szintű funkciókat (Alap funkciók, Tartalom-feed, Üzenetküldés) — a kanonikus [`diagrams/UseCase.puml`](../diagrams/UseCase.puml) forrással megegyezően — nem ismétlik meg, hanem a BandMember ⊳ User, Leader ⊳ BandMember, Admin ⊳ Leader szerepkör-öröklés biztosítja azokat (ld. [3.3](#sec-3-3) mátrix, ahol ez explicit ✔-ként szerepel). A User diagramja emiatt kivétel: mivel nincs "őse", minden hozzá tartozó use case explicit szerepel rajta.
 
 > **Tervezési javaslat — Tartalom-feed:** az Instagram-szerű "Feed megtekintése" funkció a felhasználó által követett bandák videó-/zenetartalmait (és minden más posztot) jeleníti meg, felhasználónként eltérő sorrendben (ld. [`diagrams/mermaid/Adatmodell.md`](../diagrams/mermaid/Adatmodell.md) "Feed-personalizáció" szakasz és [6.1](#sec-6-1)). A tartalom posztolása, kedvelése és a bandák követése egyelőre — a többi tartalom-létrehozó funkcióhoz (pl. Zene posztolása) hasonlóan — User-szintű funkció; a Feed megtekintése ugyanakkor minden szerepkör számára elérhető, az Eseménynaptár megtekintéséhez hasonlóan.
 
@@ -379,6 +397,11 @@ flowchart LR
 > - **Előadó követése:** a Banda követése ([F3](#sec-3-2)) mintájára a User (és az Admin) egyes felhasználókat (előadókat/zenészeket), nem csak bandákat is követhet; a `FOLLOW` entitás emiatt mindkét célentitást (Banda vagy Előadó/User) kezelni tudja (ld. [6.1](#sec-6-1)).
 > - **Eseményre feliratkozás:** bármely szerepkör jelezheti részvételi szándékát egy próbán/koncerten (`CALENDAR_EVENT`) — új `EVENT_SIGNUP` entitás (ld. [6.1](#sec-6-1)), az Eseménynaptár megtekintéséhez hasonlóan minden szerepkör számára elérhető.
 > - **Szavazás (banda-belüli):** a Leader szavazást hozhat létre a saját bandáján belül (pl. dalválasztás, próbaidőpont-egyeztetés); a banda tagjai (BandMember, és a Leader is) szavazatot adhatnak le — új `POLL` / `POLL_OPTION` / `POLL_VOTE` entitások (ld. [6.1](#sec-6-1)).
+
+> **Tervezési javaslat — Chat (v0.16):**
+> - **Privát chat:** bármely két felhasználó között (szerepkörtől függetlenül) 1:1 beszélgetés indítható, pl. egy banda vagy egy előadó megkeresésére. Két felhasználó között legfeljebb egy privát beszélgetés létezik — ismételt indításkor a meglévő nyílik meg.
+> - **Banda-chat használata:** a rendszer egyetlen csoportos chat-formája — tetszőleges felhasználókból álló csoport nem hozható létre. Minden bandához a létrehozásakor automatikusan egy közös beszélgetés jön létre, amelynek résztvevői mindig a banda aktív tagjai (`MEMBERSHIP.status = aktiv`) — csatlakozáskor automatikusan bekerülnek, eltávolításkor/kilépéskor kikerülnek, így a Leadernek nem kell külön kezelnie. A Leader moderálhatja (üzeneteket törölhet). A BandMember csomag része (M7), a Leader a szerepkör-öröklés révén szintén eléri.
+> - Mindkettő ugyanarra az adatmodellre (`CONVERSATION` / `CONVERSATION_PARTICIPANT` / `MESSAGE`, ld. [6.1](#sec-6-1)) és ugyanarra a valós idejű csatornára (WebSocket + STOMP, ld. [4.2](#sec-4-2)) épül. A Privát chat — a Feed megtekintéséhez hasonlóan — minden szerepkör számára elérhető, ezért új, „Üzenetküldés (minden felhasználó)” csomagba került (CH1).
 
 <a id="sec-3-3"></a>
 
@@ -400,6 +423,7 @@ flowchart LR
 | Banda követése | ✔ | — | — | ✔ |
 | Előadó követése | ✔ | — | — | ✔ |
 | Feed megtekintése | ✔ | ✔ | ✔ | ✔ |
+| Privát chat | ✔ | ✔ | ✔ | ✔ |
 | Banda kezelése | — | ✔ | — | ✔ |
 | Tagok kezelése | — | ✔ | — | ✔ |
 | Eseménynaptár kezelése | — | ✔ | — | ✔ |
@@ -413,6 +437,7 @@ flowchart LR
 | Próba naptár megtekintése | — | — | ✔ | ✔ |
 | Koncert megtekintése | — | ✔ | ✔ | ✔ |
 | Szavazásban részvétel | — | ✔ | ✔ | ✔ |
+| Banda-chat használata | — | ✔ | ✔ | ✔ |
 | Userek kezelése | — | — | — | ✔ |
 | Userek törlése | — | — | — | ✔ |
 
@@ -437,7 +462,7 @@ A C4 modell kanonikus forrása a [`diagrams/c4.puml`](../diagrams/c4.puml) fájl
 ```mermaid
 flowchart TD
     user["<b>Felhasználó</b><br/><i>Person</i><br/>Zenész: User / Leader / BandMember / Admin szerepkörben"]
-    bandhub["<b>Bandhub</b><br/><i>Software System</i><br/>Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása"]
+    bandhub["<b>Bandhub</b><br/><i>Software System</i><br/>Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása, privát és banda-chat"]
     email["<b>E-mail szolgáltató</b><br/><i>Software System - külső</i><br/>Tranzakciós e-mailek (regisztráció, meghívók, próba-/koncertértesítés) kiküldése, pl. SMTP relay szolgáltatón keresztül"]
 
     user -->|"Regisztrál, bejelentkezik, bandákat/próbákat/koncerteket kezel, tartalmat oszt meg<br/>[HTTPS]"| bandhub
@@ -461,9 +486,9 @@ flowchart TD
         web["<b>Web kliens</b><br/><i>React + TypeScript (SPA)</i><br/>Böngészőből elérhető felhasználói felület"]
         desktop["<b>Asztali kliens</b><br/><i>C# / WPF</i><br/>Windows asztali alkalmazás"]
         mobile["<b>Mobil kliens</b><br/><i>Kotlin (Android)</i><br/>Mobilalkalmazás"]
-        nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>Web kliens statikus kiszolgálása, API-forgalom proxyzása és TLS-terminálása minden kliens számára"]
-        backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>Üzleti logika, jogosultságkezelés (JWT), REST API — közös minden kliens számára"]
-        db[("<b>Adatbázis</b><br/><i>PostgreSQL</i><br/>Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai")]
+        nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>Web kliens statikus kiszolgálása, API- és WebSocket-forgalom proxyzása, TLS-terminálás minden kliens számára"]
+        backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>Üzleti logika, jogosultságkezelés (JWT), REST API és WebSocket (chat) — közös minden kliens számára"]
+        db[("<b>Adatbázis</b><br/><i>PostgreSQL</i><br/>Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai, chat-üzenetek")]
         storage[("<b>Objektumtár</b><br/><i>MinIO (S3-kompatibilis)</i><br/>Feltöltött zene-/videófájlok, borító- és profilképek")]
     end
 
@@ -473,10 +498,10 @@ flowchart TD
     user -->|"Használja"| desktop
     user -->|"Használja"| mobile
 
-    web -->|"Betöltés + API hívások<br/>[HTTPS]"| nginx
-    desktop -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    mobile -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON]"| backend
+    web -->|"Betöltés + API hívások + chat<br/>[HTTPS, WSS]"| nginx
+    desktop -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    mobile -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON, WebSocket]"| backend
 
     backend -->|"Olvas / ír<br/>[JDBC/SQL]"| db
     backend -->|"Fájl feltöltés / lekérés<br/>[S3 API]"| storage
@@ -490,7 +515,7 @@ flowchart TD
     class email external
 ```
 
-**Component szint:** a Backend API belső, moduláris felépítését az alábbi 5 diagram mutatja, egy-egy felelősségi körre bontva (ld. még [5. fejezet](#sec-5) és [`diagrams/mermaid/Component.md`](../diagrams/mermaid/Component.md)). A teljes komponensdiagram (10 elem, ~19 kapcsolat) egyetlen ábrán olvashatatlanul egymásra futó feliratokat eredményezett; a `flowchart`-motor egy célba (pl. Security modul) futó 4 forrás-nyilat még átfedés nélkül el tud rendezni, de az 5 forrásból egy célba (Adatbázis) futó eset enyhe átfedést produkált, ezért a **Jogosultság-ellenőrzés** egyetlen diagram, az **Adatbázis-elérés** viszont 2 résznézetre van bontva. A teljes, egyben látható komponensdiagram a kanonikus [`diagrams/c4.puml`](../diagrams/c4.puml) `C4_Component` blokkjában érhető el. A Container-diagramnak megfelelően a kliensek hívásai ténylegesen a Reverse proxyn (Nginx) keresztül érkeznek a modulokhoz — a pontosság kedvéért ez az 1. résznézeten is szerepel.
+**Component szint:** a Backend API belső, moduláris felépítését az alábbi 6 diagram mutatja, egy-egy felelősségi körre bontva (ld. még [5. fejezet](#sec-5) és [`diagrams/mermaid/Component.md`](../diagrams/mermaid/Component.md)). A teljes komponensdiagram (a Chat modullal együtt 12 elem, 23 kapcsolat) egyetlen ábrán olvashatatlanul egymásra futó feliratokat eredményezett; a `flowchart`-motor egy célba (pl. Security modul) futó 4 forrás-nyilat még átfedés nélkül el tud rendezni, de az 5 forrásból egy célba (Adatbázis) futó eset enyhe átfedést produkált, ezért a **Jogosultság-ellenőrzés** egyetlen diagram, az **Adatbázis-elérés** viszont 2 résznézetre van bontva. A teljes, egyben látható komponensdiagram a kanonikus [`diagrams/c4.puml`](../diagrams/c4.puml) `C4_Component` blokkjában érhető el. A Container-diagramnak megfelelően a kliensek hívásai ténylegesen a Reverse proxyn (Nginx) keresztül érkeznek a modulokhoz — a pontosság kedvéért ez az 1. résznézeten is szerepel. A v0.16-ban bevezetett **Üzenetkezelő (Chat) modul** az 1. résznézetben (kérés-útvonal) szerepel, többi kapcsolata viszont egy külön, **6. résznézetben** — így a Jogosultság-ellenőrzés és az Adatbázis-elérés résznézetek fan-in-je nem nő az átfedést okozó szint fölé.
 
 *1. Kérés-útvonal (Nginx → modulok):*
 
@@ -503,18 +528,20 @@ flowchart TD
     bandSvc["<b>Bandakezelő modul</b><br/><i>Controller/Service/Repository</i><br/>Banda, tagság, szavazás"]
     eventSvc["<b>Próba-/koncert-/naptármodul</b><br/><i>Controller/Service/Repository</i><br/>Próba, koncert, feliratkozás"]
     contentSvc["<b>Tartalomkezelő modul</b><br/><i>Controller/Service/Repository</i><br/>Zene/videó, feed, mentés, követés"]
+    chatSvc["<b>Üzenetkezelő (Chat) modul</b><br/><i>Spring WebSocket + STOMP</i><br/>Privát és banda-chat"]
 
-    client -->|"REST/JSON<br/>[HTTPS]"| nginx
+    client -->|"REST/JSON + WebSocket<br/>[HTTPS, WSS]"| nginx
     nginx -->|"Bejelentkezés / regisztráció<br/>[REST/JSON]"| security
     nginx -->|"REST/JSON"| userSvc
     nginx -->|"REST/JSON"| bandSvc
     nginx -->|"REST/JSON"| eventSvc
     nginx -->|"REST/JSON"| contentSvc
+    nginx -->|"WebSocket (STOMP)<br/>+ REST/JSON"| chatSvc
 
     classDef container fill:#1168BD,stroke:#0B4884,color:#fff
     classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
     class client,nginx container
-    class security,userSvc,bandSvc,eventSvc,contentSvc component
+    class security,userSvc,bandSvc,eventSvc,contentSvc,chatSvc component
 ```
 
 *2. Jogosultság-ellenőrzés (RBAC):*
@@ -593,6 +620,27 @@ flowchart TD
     class email external
 ```
 
+*6. Valós idejű üzenetküldés (Chat):*
+
+```mermaid
+flowchart TD
+    nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>WebSocket-kapcsolat továbbítása"]
+    bandSvc["<b>Bandakezelő modul</b><br/><i>Controller/Service/Repository</i><br/>Banda, tagság, szavazás"]
+    chatSvc["<b>Üzenetkezelő (Chat) modul</b><br/><i>Spring WebSocket + STOMP</i><br/>Privát és banda-chat, valós idejű kézbesítés"]
+    security["<b>Security / Auth modul</b><br/><i>Spring Security + JWT</i><br/>Token-validálás"]
+    db[("<b>Adatbázis</b><br/><i>PostgreSQL</i>")]
+
+    nginx -->|"Üzenetek + előzmények<br/>[WSS / STOMP, REST/JSON]"| chatSvc
+    bandSvc -->|"Tagság-változás:<br/>banda-chat résztvevők szinkronizálása"| chatSvc
+    chatSvc -->|"JWT + résztvevő-ellenőrzés"| security
+    chatSvc -->|"Olvas/ír<br/>[JDBC/SQL]"| db
+
+    classDef container fill:#1168BD,stroke:#0B4884,color:#fff
+    classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
+    class nginx,db container
+    class bandSvc,chatSvc,security component
+```
+
 > **HELYŐRZŐ:** hogy az önálló objektumtár (MinIO) konténer szükséges-e, vagy a média MVP-ben felhő tárhelyen (pl. S3) kezelendő, illetve hogy egyáltalán szükséges-e fájltárolás az MVP-ben — ez jóváhagyást igényel a terméktulajdonostól/csapattól.
 
 <a id="sec-4-2"></a>
@@ -614,8 +662,9 @@ A [`diagrams/Cont.md`](../diagrams/Cont.md) alapján **ténylegesen ismert**: Ja
 | Objektumtár | MinIO (S3-kompatibilis, önhosztolt) | A posztolt zene-/videófájlok (ld. [6.1](#sec-6-1) `POST.media_url`) mérete/jellege miatt nem az adatbázisba valók; a konténerizált, önhosztolt megoldás konzisztens a `Cont.md` elvárásával, és elkerüli a felhő tárhely korai bevonását. |
 | Autentikáció | JWT alapú, session nélküli API-hitelesítés | Egyszerű, jól skálázható, platformfüggetlen — minden kliens típussal kompatibilis. |
 | Reverse proxy / statikus kiszolgálás | Nginx (Web kliens build kiszolgálása, API proxyzás minden kliens felé, TLS) | Bevált, könnyűsúlyú megoldás egy közös belépési pont biztosítására. |
+| Valós idejű kommunikáció (chat) | Spring WebSocket + STOMP, a Spring beépített (in-memory) simple brokerével; kliensoldalon STOMP-kliens (Web: `@stomp/stompjs`, Asztali/Mobil: platformspecifikus STOMP-/WebSocket-kliens) | A chat valós idejű kézbesítést igényel, amit REST-lekérdezéssel (polling) csak pazarlóan lehetne megoldani; a Spring Boot natívan támogatja, nem igényel új konténert, és egyetlen backend-példány mellett a beépített broker elegendő. Az Nginx-ben a WebSocket `Upgrade` fejlécének továbbítását be kell állítani. |
 
-> **HELYŐRZŐ:** az objektumtár (MinIO) bevezetése jóváhagyást igénylő döntés, ld. [4.1](#sec-4-1) HELYŐRZŐ. Üzenetkezelés/cache réteg (pl. Redis) egyelőre nem indokolt; csak akkor válik szükségessé, ha valós idejű funkciók (pl. élő értesítések, WebSocket) bekerülnek a tervbe. Az Asztali/Mobil kliens tényleges ütemezése (mely fázisban készül el a Webhez képest) csapatdöntést igényel.
+> **HELYŐRZŐ:** az objektumtár (MinIO) bevezetése jóváhagyást igénylő döntés, ld. [4.1](#sec-4-1) HELYŐRZŐ. A chat (v0.16) miatt a rendszer már tartalmaz valós idejű (WebSocket) funkciót, de egyetlen backend-példány mellett a Spring beépített simple brokere elegendő; külső üzenetközvetítő (pl. RabbitMQ STOMP broker relay vagy Redis pub/sub) csak a backend horizontális skálázásakor (több példány) válik szükségessé, ld. [9.3](#sec-9-3). Az Asztali/Mobil kliens tényleges ütemezése (mely fázisban készül el a Webhez képest) csapatdöntést igényel.
 
 <a id="sec-4-3"></a>
 
@@ -623,7 +672,7 @@ A [`diagrams/Cont.md`](../diagrams/Cont.md) alapján **ténylegesen ismert**: Ja
 
 **Ajánlott elvek:**
 - **Architekturális stílus:** rétegezett, moduláris monolit (controller/service/repository rétegek, funkció szerint elkülönített modulokkal — ld. [5.1](#sec-5-1)). Indoklás: a jelenleg ismert funkciókészlet (banda-, próba-, koncertkezelés) mérete nem indokolja a mikroszolgáltatás-architektúra üzemeltetési többletköltségét egy korai fázisú projektnél.
-- **API-stílus:** REST/JSON, erőforrás-alapú végpontokkal (pl. `/api/bands`, `/api/bands/{id}/rehearsals`).
+- **API-stílus:** REST/JSON, erőforrás-alapú végpontokkal (pl. `/api/bands`, `/api/bands/{id}/rehearsals`). Kivétel a chat valós idejű forgalma: az üzenetek WebSocket-kapcsolaton, STOMP protokollal közlekednek (küldés: `/app/conversations/{id}/messages`, fogadás: `/user/queue/messages`), az üzenet-előzmények lapozott lekérése viszont REST-en történik (`GET /api/conversations/{id}/messages`).
 - **Kliens-szerver szétválasztás:** mindhárom kliens — Web (React), Asztali (C#/WPF) és Mobil (Kotlin) — kizárólag a közös backend REST API-n keresztül kommunikál, önálló build/deploy egységként. Ez a szétválasztás teszi lehetővé, hogy egy platform fejlesztése/kiadása a másik kettőt ne érintse.
 - **Szerepkör-alapú hozzáférés-vezérlés (RBAC):** a use case diagramon (3.2) definiált négy szerepkör (User, Leader, BandMember, Admin) a backendben végpont-/műveletszintű jogosultság-ellenőrzésként valósul meg (ld. [10.2](#sec-10-2)).
 
@@ -639,7 +688,7 @@ A [`diagrams/Cont.md`](../diagrams/Cont.md) alapján **ténylegesen ismert**: Ja
 
 ### 5.1 Backend komponensek
 
-A use case diagram (3.2) funkciói alapján az alábbi hat domain modul ajánlott, mindegyik a 4.3-ban leírt controller/service/repository rétegződéssel (ld. [`diagrams/mermaid/Component.md`](../diagrams/mermaid/Component.md)). A korábbi tervezetben külön szereplő Próba-/koncert- és Naptár modult, illetve a Zenei tartalom- és Tartalom-feed modult itt egy-egy komponensbe vontam össze — a szétválasztás nem indokolt méretű felelősségi kört jelentett volna:
+A use case diagram (3.2) funkciói alapján az alábbi hét domain modul ajánlott, mindegyik a 4.3-ban leírt controller/service/repository rétegződéssel (ld. [`diagrams/mermaid/Component.md`](../diagrams/mermaid/Component.md)). A korábbi tervezetben külön szereplő Próba-/koncert- és Naptár modult, illetve a Zenei tartalom- és Tartalom-feed modult itt egy-egy komponensbe vontam össze — a szétválasztás nem indokolt méretű felelősségi kört jelentett volna:
 
 | Modul | Felelősség | Kapcsolódó use case-ek |
 |---|---|---|
@@ -649,6 +698,7 @@ A use case diagram (3.2) funkciói alapján az alábbi hat domain modul ajánlot
 | Próba-/koncert-/naptármodul | Próbák és koncertek létrehozása/kezelése/megtekintése, eseménynaptár összesített megjelenítése és kezelése, eseményre feliratkozás | Próba létrehozása, Próba kezelése, Koncert létrehozása, Próba/Koncert megtekintése, Eseménynaptár megtekintése/kezelése, Próba naptár megtekintése, Eseményre feliratkozás |
 | Tartalomkezelő modul | Zene/videó posztolása, keresése, kedvelés, banda- és előadókövetés, személyre szabott feed összeállítása, tartalom mentése kategóriákkal | Zene posztolása, Zene keresése, Videó posztolása, Tartalom kedvelése, Banda követése, Előadó követése, Feed megtekintése, Tartalom mentése |
 | Értesítő modul | E-mail értesítések összeállítása és küldése (csatlakozási kérelem, meghívó, emlékeztető) | — (a többi modulból kiváltott mellékhatás) |
+| Üzenetkezelő (Chat) modul | Privát és banda-chat beszélgetések kezelése (létrehozás, résztvevők), üzenetek tárolása és valós idejű kézbesítése WebSocket/STOMP-on, olvasatlan üzenetek nyilvántartása (`last_read_at`), előzmények lapozott lekérése; a banda-chat résztvevőit a Bandakezelő modul tagság-változásai alapján szinkronizálja | Privát chat, Banda-chat használata |
 
 > **HELYŐRZŐ:** a fenti modulok tényleges kódstruktúrával (csomag-/package-elrendezés) való megfeleltetése az implementáció megkezdésekor válik ellenőrizhetővé.
 
@@ -664,6 +714,7 @@ Mivel mindhárom kliens (Web/React, Asztali/C#-WPF, Mobil/Kotlin — ld. [4.2](#
 - **Naptár nézet** — próbák/koncertek megtekintése, Leader esetén kezelése.
 - **Zenei tartalom nézet** — zene keresése és posztolása.
 - **Profil nézet** — profil szerkesztése.
+- **Chat nézet** — beszélgetéslista (privát és banda-chatek) olvasatlan-jelzéssel, beszélgetésablak valós idejű üzenetekkel; a banda-chat a banda adatlapjáról is elérhető.
 - **Adminisztrációs nézet** — felhasználók kezelése/törlése (Admin).
 
 > **HELYŐRZŐ:** az egyes platformok komponensfa/mappastruktúrája a tényleges implementáció alapján bővítendő, valamint hogy melyik platform készül el elsőként (ütemezési kérdés, ld. [4.2](#sec-4-2) HELYŐRZŐ).
@@ -672,7 +723,7 @@ Mivel mindhárom kliens (Web/React, Asztali/C#-WPF, Mobil/Kotlin — ld. [4.2](#
 
 ### 5.3 Komponensek közötti kapcsolatok
 
-A kliensek és a backend a 4.1-ben leírt Container-diagramnak megfelelően, az Nginx reverse proxyn keresztül, REST/JSON API-n és HTTPS-en kommunikálnak (ld. [4.3](#sec-4-3)) — a Web/Asztali/Mobil kliens mindegyike ugyanazt a közös backend API-t használja, platformspecifikus különbség nélkül. A Tartalomkezelő modul emellett az Objektumtárral (MinIO) is közvetlenül kommunikál, a médiafájlok feltöltéséhez/letöltéséhez (S3 API).
+A kliensek és a backend a 4.1-ben leírt Container-diagramnak megfelelően, az Nginx reverse proxyn keresztül, REST/JSON API-n és HTTPS-en kommunikálnak (ld. [4.3](#sec-4-3)) — a Web/Asztali/Mobil kliens mindegyike ugyanazt a közös backend API-t használja, platformspecifikus különbség nélkül. A Tartalomkezelő modul emellett az Objektumtárral (MinIO) is közvetlenül kommunikál, a médiafájlok feltöltéséhez/letöltéséhez (S3 API). A chathez a kliensek a REST-hívások mellett egy tartós WebSocket-kapcsolatot (WSS) is nyitnak, amelyet az Nginx a Backend API Üzenetkezelő (Chat) moduljához továbbít.
 
 > **HELYŐRZŐ:** részletes API-szerződés (végpontlista, kérés-/válaszformátumok) — ez a backend implementáció során, pl. OpenAPI/Swagger specifikációként dokumentálandó.
 
@@ -710,9 +761,15 @@ erDiagram
     POLL ||--o{ POLL_OPTION : "valasztasi lehetosegei"
     POLL_OPTION ||--o{ POLL_VOTE : "szavazatai"
     USER ||--o{ POLL_VOTE : "szavaz"
+    USER ||--o{ CONVERSATION : "letrehozza"
+    BAND ||--o| CONVERSATION : "banda-chat (opcionalis)"
+    CONVERSATION ||--o{ CONVERSATION_PARTICIPANT : "resztvevoi"
+    USER ||--o{ CONVERSATION_PARTICIPANT : "resztvesz"
+    CONVERSATION ||--o{ MESSAGE : "uzenetei"
+    USER ||--o{ MESSAGE : "kuld"
 ```
 
-A `POST`, `FOLLOW` és `POST_LIKE` entitások a [3.2](#sec-3-2)-ben bevezetett **Tartalom-feed** funkciót (Instagram-szerű, személyre szabott videó-/zenefolyam) szolgálják ki. A `SAVED_ITEM`, `EVENT_SIGNUP` és `POLL`/`POLL_OPTION`/`POLL_VOTE` entitások a [3.2](#sec-3-2)-ben bevezetett **Tartalom mentése**, **Eseményre feliratkozás**, illetve **Banda-belüli szavazás** funkciókat szolgálják ki (v0.10, ld. [`diagrams/mermaid/Adatmodell.md`](../diagrams/mermaid/Adatmodell.md) "Mentés, követés, feliratkozás és szavazás" szakasza).
+A `POST`, `FOLLOW` és `POST_LIKE` entitások a [3.2](#sec-3-2)-ben bevezetett **Tartalom-feed** funkciót (Instagram-szerű, személyre szabott videó-/zenefolyam) szolgálják ki. A `SAVED_ITEM`, `EVENT_SIGNUP` és `POLL`/`POLL_OPTION`/`POLL_VOTE` entitások a [3.2](#sec-3-2)-ben bevezetett **Tartalom mentése**, **Eseményre feliratkozás**, illetve **Banda-belüli szavazás** funkciókat szolgálják ki (v0.10, ld. [`diagrams/mermaid/Adatmodell.md`](../diagrams/mermaid/Adatmodell.md) "Mentés, követés, feliratkozás és szavazás" szakasza). A `CONVERSATION`, `CONVERSATION_PARTICIPANT` és `MESSAGE` entitások a v0.16-ban bevezetett **Privát chat** és **Banda-chat** funkciókat szolgálják ki (ld. lent a „Chat” bekezdést és [3.2](#sec-3-2)).
 
 | Entitás | Mező | Típus | Megjegyzés |
 |---|---|---|---|
@@ -780,6 +837,24 @@ A `POST`, `FOLLOW` és `POST_LIKE` entitások a [3.2](#sec-3-2)-ben bevezetett *
 | POLL_VOTE | option_id | uuid | a leadott szavazat szerinti `POLL_OPTION` |
 | POLL_VOTE | user_id | uuid | a szavazó USER (a banda tagja) |
 | POLL_VOTE | voted_at | datetime | |
+| CONVERSATION | id | uuid | |
+| CONVERSATION | type | string | privat / banda |
+| CONVERSATION | band_id | uuid | opcionális — csak `type = banda` esetén, bandánként egyedi |
+| CONVERSATION | created_by | uuid | a létrehozó USER (privát chatnél az indító fél, banda-chatnél a banda Leadere) |
+| CONVERSATION | created_at | datetime | |
+| CONVERSATION_PARTICIPANT | id | uuid | |
+| CONVERSATION_PARTICIPANT | conversation_id | uuid | |
+| CONVERSATION_PARTICIPANT | user_id | uuid | |
+| CONVERSATION_PARTICIPANT | joined_at | datetime | |
+| CONVERSATION_PARTICIPANT | last_read_at | datetime | az utoljára olvasott időpont — az olvasatlan-számláló alapja |
+| CONVERSATION_PARTICIPANT | left_at | datetime | opcionális — kilépés/eltávolítás időpontja (a korábbi üzenetek megmaradnak) |
+| MESSAGE | id | uuid | |
+| MESSAGE | conversation_id | uuid | |
+| MESSAGE | sender_id | uuid | a küldő USER |
+| MESSAGE | body | text | az üzenet szövege (az MVP-ben csak szöveg) |
+| MESSAGE | created_at | datetime | |
+| MESSAGE | edited_at | datetime | opcionális |
+| MESSAGE | deleted_at | datetime | opcionális — soft delete (a küldő, banda-chatben a Leader is törölhet) |
 
 **Mentés, követés, feliratkozás és szavazás (tervezési javaslat, v0.10):**
 - **Mentés (`SAVED_ITEM`):** minden szerepkör számára elérhető, tetszőleges célentitásra (poszt, banda, előadó, esemény) vonatkozhat; a `category` mező szabad szöveges, felhasználónkénti csoportosítást tesz lehetővé, nincs előre definiált, rendszerszintű kategórialista.
@@ -788,6 +863,14 @@ A `POST`, `FOLLOW` és `POST_LIKE` entitások a [3.2](#sec-3-2)-ben bevezetett *
 - **Szavazás (`POLL`/`POLL_OPTION`/`POLL_VOTE`):** kizárólag egy adott bandán belül értelmezett — a szavazást csak az adott banda Leadere hozhatja létre, és csak az adott banda tagjai (BandMember és a Leader) szavazhatnak.
 
 > **HELYŐRZŐ:** az előadó-követés jelenleg még nem hat a Feed-personalizációra (alább) — csak a banda-követés; ennek kiterjesztése (vagy tudatos elhagyása) jóváhagyást igényel.
+
+**Chat (tervezési javaslat, v0.16):**
+- **Egy közös modell, két típus:** a privát és a banda-chat ugyanaz a `CONVERSATION` entitás, a `type` mező különbözteti meg őket — így az üzenetküldés, a kézbesítés és az olvasottság logikája egyetlen helyen valósul meg.
+- **Privát (`type = privat`):** pontosan 2 résztvevő; egy felhasználópár között legfeljebb egy privát beszélgetés létezhet (egyediségi kényszer, implementáció során rögzítendő) — ismételt indításkor a meglévő nyílik meg.
+- **Banda-chat (`type = banda`):** ez az egyetlen csoportos beszélgetés-típus (tetszőleges felhasználókból álló csoport nem hozható létre); bandánként pontosan egy, a banda létrehozásakor jön létre, neve a banda neve; résztvevői a banda `MEMBERSHIP`-jeiből szinkronizálódnak (a tagság `Aktiv` állapotba lépésekor bekerül, `Eltavolitva` állapotba lépésekor a `left_at` kitöltődik — ld. a tagság állapotgépét).
+- **Olvasatlan üzenetek:** egy résztvevő olvasatlan üzenetei a `MESSAGE.created_at > CONVERSATION_PARTICIPANT.last_read_at` feltétellel számolhatók — üzenetenkénti „olvasta” tábla az MVP-ben nem szükséges.
+
+> **HELYŐRZŐ:** fájl-/képküldés a chatben (a meglévő Objektumtár újrahasznosításával), üzenetkeresés, „gépel…” jelzés és üzenetenkénti olvasási visszaigazolás — ezek nem részei a jelenlegi javaslatnak, bevezetésük külön döntést igényel.
 
 **Feed-personalizáció (tervezési javaslat):** a "Feed megtekintése" mindenkinek ugyanazt a tartalomkészletet (POST) mutatja, de eltérő sorrendben — a `FOLLOW` alapján a követett bandák posztjai kerülnek előre, ezen belül létrehozás szerint csökkenő sorrend, a `POST_LIKE`-ból számított kedvelésszám pedig másodlagos rendezési szempont. A konkrét PostgreSQL DDL az implementációs fázis feladata; a séma tervezési szinten a fenti entitás-/mezőtáblázatban van rögzítve (a tervezés során egy próba-DDL-lel helyi PostgreSQL-en leellenőrizve, hogy a modell futtatható).
 
@@ -811,6 +894,7 @@ stateDiagram-v2
 
 A 6.1-ben javasolt adatmodell alapján a rendszer az alábbi személyes adatokat kezelné: e-mail cím, jelszó (hash formában), megjelenítendő név, valamint a felhasználó által posztolt tartalom. **Tervezési javaslat:**
 - A jelszavakat kizárólag hash formában (pl. bcrypt/Argon2) szabad tárolni, soha nem plain textben.
+- A chat-üzenetek (`MESSAGE.body`) személyes adatnak minősülnek: csak a beszélgetés résztvevői érhetik el (ld. [10.2](#sec-10-2)), naplóba nem kerülhetnek (ld. [12.2](#sec-12-2)), felhasználó törlésekor (Userek törlése) a küldött üzenetek anonimizálandók vagy törlendők. Végpontok közötti titkosítás (E2EE) nem része a javaslatnak — ezt az adatkezelési tájékoztatóban jelezni kell.
 - A rendszernek — mivel uniós felhasználók személyes adatait kezelheti — meg kell felelnie a GDPR alapelveinek (adattakarékosság, célhoz kötöttség, hozzáférési/törlési jog biztosítása).
 
 > **HELYŐRZŐ:** a jogalap (pl. szerződés teljesítése vagy hozzájárulás), az adatkezelési tájékoztató szövege és a tényleges GDPR-megfelelőségi audit — ezek jogi/szervezeti döntést igényelnek, a jelenlegi forrásanyagokból nem vezethetők le.
@@ -820,6 +904,8 @@ A 6.1-ben javasolt adatmodell alapján a rendszer az alábbi személyes adatokat
 ### 6.3 Adatmegőrzés és biztonsági mentés
 
 > **HELYŐRZŐ:** mentési (backup) gyakoriság, megőrzési idő, helyreállítási terv (RPO/RTO) — ezek az üzemeltetési környezet (ld. [9. fejezet](#sec-9)) kialakításakor, az adatbázis-választással (jelenleg tervezési javaslat: PostgreSQL, ld. [4.2](#sec-4-2)) összhangban döntendők el.
+
+> **HELYŐRZŐ:** a chat-üzenetek megőrzési ideje (korlátlan, vagy egy meghatározott idő után automatikus törlés) — adatvédelmi és tárhely-kapacitási döntés.
 
 ---
 
@@ -876,14 +962,14 @@ flowchart TD
 
 ### 7.2 Use case-enkénti tevékenységdiagramok
 
-A [3.2](#sec-3-2) fejezetben felsorolt **minden egyes use case-hez** tartozik egy önálló, kompakt activity (tevékenység-) diagram, amely az adott funkció lépéseit mutatja be. Ezeket — a use case diagramhoz hasonlóan — csomagonként (Common/Tartalom-feed, Leader, BandMember, Admin) külön fájlokba szerveztük az áttekinthetőség miatt:
+A [3.2](#sec-3-2) fejezetben felsorolt **minden egyes use case-hez** tartozik egy önálló, kompakt activity (tevékenység-) diagram, amely az adott funkció lépéseit mutatja be. Ezeket — a use case diagramhoz hasonlóan — csomagonként (Common/Tartalom-feed/Üzenetküldés, Leader, BandMember, Admin) külön fájlokba szerveztük az áttekinthetőség miatt:
 
-- [`diagrams/mermaid/ActivityCommon.md`](../diagrams/mermaid/ActivityCommon.md) — Alap funkciók és Tartalom-feed (14 diagram: Zene keresése, Bandák keresése, Bandához csatlakozás, Banda létrehozása, Profil szerkesztése, Zene posztolása, Eseménynaptár megtekintése, Tartalom mentése, Eseményre feliratkozás, Videó posztolása, Tartalom kedvelése, Banda követése, Feed megtekintése, Előadó követése)
+- [`diagrams/mermaid/ActivityCommon.md`](../diagrams/mermaid/ActivityCommon.md) — Alap funkciók, Tartalom-feed és Üzenetküldés (15 diagram: Zene keresése, Bandák keresése, Bandához csatlakozás, Banda létrehozása, Profil szerkesztése, Zene posztolása, Eseménynaptár megtekintése, Tartalom mentése, Eseményre feliratkozás, Videó posztolása, Tartalom kedvelése, Banda követése, Feed megtekintése, Előadó követése, Privát chat)
 - [`diagrams/mermaid/ActivityLeader.md`](../diagrams/mermaid/ActivityLeader.md) — Banda- és próbakezelés (7 diagram: Banda kezelése, Tagok kezelése, Eseménynaptár kezelése, Próba létrehozása, Próba kezelése, Koncert létrehozása, Szavazás létrehozása)
-- [`diagrams/mermaid/ActivityMember.md`](../diagrams/mermaid/ActivityMember.md) — Csapat áttekintése (6 diagram: Banda megtekintése, Tagok megtekintése, Próba megtekintése, Próba naptár megtekintése, Koncert megtekintése, Szavazásban részvétel)
+- [`diagrams/mermaid/ActivityMember.md`](../diagrams/mermaid/ActivityMember.md) — Csapat áttekintése (7 diagram: Banda megtekintése, Tagok megtekintése, Próba megtekintése, Próba naptár megtekintése, Koncert megtekintése, Szavazásban részvétel, Banda-chat használata)
 - [`diagrams/mermaid/ActivityAdmin.md`](../diagrams/mermaid/ActivityAdmin.md) — Adminisztráció (2 diagram: Userek kezelése, Userek törlése — a "Mindent tud amit a többi rang rendelkezik" use case a másik három csomag diagramjaira hivatkozik, nincs önálló folyamata)
 
-Ez összesen 29 use case-hez tartozó activity diagramot jelent, ami megfelel a [3.2](#sec-3-2) és [3.3](#sec-3-3) fejezetben felsorolt összes egyedi funkciónak. A 7.1-ben bemutatott belépési/regisztrációs főfolyam ezeket megelőzi (a Főmenüből ér el minden ilyen funkciót).
+Ez összesen 31 use case-hez tartozó activity diagramot jelent, ami megfelel a [3.2](#sec-3-2) és [3.3](#sec-3-3) fejezetben felsorolt összes egyedi funkciónak. A 7.1-ben bemutatott belépési/regisztrációs főfolyam ezeket megelőzi (a Főmenüből ér el minden ilyen funkciót).
 
 > **HELYŐRZŐ:** a diagramok a use case nevéből és a use case-hez tartozó entitásokból ([6.1](#sec-6-1)) levezetett, tervezési javaslat szintű lépéseket mutatnak; a tényleges UI/API implementáció során pontosítandók.
 
@@ -939,6 +1025,34 @@ sequenceDiagram
     end
 ```
 
+**Üzenet küldése (privát / banda-chat):** mindkét chat-típus ugyanezt a folyamatot követi (ld. [`diagrams/mermaid/UzenetKuldes.md`](../diagrams/mermaid/UzenetKuldes.md)). A REST-alapú folyamatokkal ellentétben itt a kliens egy már megnyitott WebSocket-kapcsolaton küld, és a backend a többi résztvevőnek kérés nélkül (push) kézbesít.
+
+```mermaid
+sequenceDiagram
+    actor K as Küldő
+    participant FE as Küldő kliense
+    participant BE as Backend API (Chat modul)
+    participant DB as Adatbázis
+    participant FE2 as Címzett(ek) kliense
+    actor C as Címzett(ek)
+
+    Note over FE,BE: Bejelentkezés után: WebSocket-kapcsolat (WSS), STOMP CONNECT a JWT-vel,<br/>feliratkozás a saját üzenetsorra (/user/queue/messages)
+    K->>FE: Üzenet beírása és elküldése
+    FE->>BE: STOMP SEND /app/conversations/{id}/messages
+    BE->>BE: JWT-ellenőrzés + résztvevője-e a beszélgetésnek?
+    alt Résztvevő és érvényes üzenet
+        BE->>DB: INSERT Message
+        DB-->>BE: OK
+        BE-->>FE: Visszaigazolás (üzenet-azonosító, időbélyeg)
+        BE-->>FE2: Új üzenet push az online résztvevőknek
+        FE2-->>C: Üzenet megjelenítése / olvasatlan-számláló növelése
+    else Nem résztvevő vagy érvénytelen üzenet
+        BE-->>FE: STOMP ERROR (403/400)
+        FE-->>K: Hibaüzenet megjelenítése
+    end
+    Note over BE,FE2: Offline résztvevő: a következő megnyitáskor REST-en tölti le az előzményeket<br/>(GET /api/conversations/{id}/messages?before=..., lapozva)
+```
+
 > **HELYŐRZŐ:** további folyamatok (pl. tagfelvétel jóváhagyása, koncert létrehozása, zenei tartalom posztolása) hasonló felépítésű szekvenciadiagramokkal bővítendők, amint a részletes folyamattervek elkészülnek.
 
 ---
@@ -949,7 +1063,7 @@ sequenceDiagram
 
 A jelenlegi diagramok és a `Cont.md` alapján a rendszernek egyetlen külső integrációja indokolt: egy **e-mail szolgáltató** (SMTP relay), a 4.1 Context-diagramon jelölve — csatlakozási kérelemről, meghívóról vagy közelgő próbáról/koncertről szóló értesítéshez (ld. [5.1](#sec-5-1) Értesítő modul). Minden más ismert funkció (banda-, próba-, koncertkezelés, zenei tartalom, naptár) a rendszeren belül, önállóan megvalósítható; a médiafájlok (zene/videó) tárolása is a rendszer saját, konténerizált objektumtárában (MinIO) történik, nem külső szolgáltatónál (ld. [4.2](#sec-4-2)).
 
-> **HELYŐRZŐ:** amennyiben a jövőben külső rendszer (pl. zenei streaming API, naptár-szinkronizáció, fizetési/jegyértékesítési szolgáltató) bevonása tervbe kerül, az itt és a 4.1 Context-diagramon dokumentálandó.
+> **HELYŐRZŐ:** amennyiben a jövőben külső rendszer (pl. zenei streaming API, naptár-szinkronizáció, fizetési/jegyértékesítési szolgáltató) bevonása tervbe kerül, az itt és a 4.1 Context-diagramon dokumentálandó. Ugyanez vonatkozik a chat offline résztvevőinek mobil push-értesítésére (pl. Firebase Cloud Messaging) — a jelenlegi javaslatban az offline résztvevő a következő megnyitáskor látja az olvasatlan üzeneteit.
 
 ---
 
@@ -978,10 +1092,10 @@ flowchart TD
     subgraph appServer["Alkalmazásszerver [Linux + Docker Engine]"]
         subgraph compose["Docker Compose stack [docker-compose.yml]"]
             subgraph nginxNode["nginx konténer [image: nginx:alpine]"]
-                nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>TLS-terminálás, statikus kiszolgálás, API-proxy"]
+                nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>TLS-terminálás, statikus kiszolgálás, API- és WebSocket-proxy"]
             end
             subgraph backendNode["backend konténer [image: bandhub-backend]"]
-                backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>REST API"]
+                backend["<b>Backend API</b><br/><i>Java 21 + Spring Boot</i><br/>REST API + WebSocket (chat)"]
             end
             subgraph dbNode["db konténer [image: postgres:16]"]
                 db[("<b>Adatbázis</b><br/><i>PostgreSQL</i><br/>Perzisztens Docker volume-on")]
@@ -996,10 +1110,10 @@ flowchart TD
         email["<b>E-mail szolgáltató</b><br/><i>Software System - külső</i><br/>Tranzakciós e-mailek kiküldése"]
     end
 
-    web -->|"Betöltés + API hívások<br/>[HTTPS]"| nginx
-    desktop -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    mobile -->|"API hívások<br/>[REST/JSON, HTTPS]"| nginx
-    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON]"| backend
+    web -->|"Betöltés + API hívások + chat<br/>[HTTPS, WSS]"| nginx
+    desktop -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    mobile -->|"API hívások + chat<br/>[REST/JSON, WSS]"| nginx
+    nginx -->|"API-hívásokat továbbít<br/>[REST/JSON, WebSocket]"| backend
     backend -->|"Olvas / ír<br/>[JDBC/SQL]"| db
     backend -->|"Fájl feltöltés / lekérés<br/>[S3 API]"| storage
     backend -->|"Értesítést küld<br/>[SMTP]"| email
@@ -1033,6 +1147,8 @@ flowchart TD
 
 > **HELYŐRZŐ:** a projekt jelenlegi, korai fázisában nincs ismert terhelési/rendelkezésre állási elvárás (SLA/SLO), ezért konkrét skálázási stratégia (horizontális/vertikális) és terheléselosztás megtervezése korai; ezt a felhasználószám és a tényleges terhelés ismeretében érdemes meghatározni.
 
+**Megjegyzés (chat, v0.16):** a WebSocket-kapcsolatok állapottartók — ha a backend több példányban fut, (a) az Nginx-ben sticky session, és (b) külső STOMP broker relay (pl. RabbitMQ) vagy Redis pub/sub szükséges, hogy az egyik példányon küldött üzenet a másik példányhoz kapcsolódó résztvevőkhöz is eljusson (ld. [4.2](#sec-4-2)). Egyetlen példány mellett ez nem kell.
+
 ---
 
 <a id="sec-10"></a>
@@ -1048,6 +1164,7 @@ A tevékenységdiagram (7.1) alapján a rendszer bejelentkezési és regisztrác
 **Tervezési javaslat:**
 - A hitelesítés session nélküli, **JWT-alapú** legyen — a frontend a sikeres bejelentkezés (7.1 folyamat) után egy tokent kap, amelyet minden további API-híváshoz csatol.
 - A jelszavakat kizárólag hash formában (bcrypt/Argon2) szabad tárolni (ld. [6.2](#sec-6-2)).
+- A chat WebSocket-kapcsolatának hitelesítése a STOMP `CONNECT` keretben átadott JWT-vel történik (a böngészők a WebSocket-kézfogásnál nem engednek egyedi `Authorization` fejlécet); érvénytelen vagy lejárt token esetén a kapcsolat elutasításra kerül.
 
 > **HELYŐRZŐ:** jelszó-komplexitási elvárások, jelszó-visszaállítási folyamat, valamint többfaktoros hitelesítés bevezetése — ezek jelenleg nem szerepelnek a forrásanyagokban.
 
@@ -1058,6 +1175,10 @@ A tevékenységdiagram (7.1) alapján a rendszer bejelentkezési és regisztrác
 A rendszer négy szerepkört különböztet meg (User, Leader, BandMember, Admin) — lásd a [3.3 szerepkör–funkció mátrixot](#sec-3-3). Az Admin szerepkör a use case diagram szerint az összes többi szerepkör jogosultságát öröklinek tekinthető. *(Tény.)*
 
 **Tervezési javaslat:** a jogosultságkezelés szerepkör-alapú hozzáférés-vezérlésként (RBAC) valósul meg — minden API-végpontnál a backend ellenőrzi a JWT tokenben szereplő szerepkört a 3.3 mátrixnak megfelelően (pl. a `/api/bands/{id}` törlés-jellegű vagy kezelő műveletei csak Leader/Admin számára engedélyezettek). A banda-specifikus jogosultságokat (pl. "az adott banda Leader-e") a `Membership` entitáshoz (ld. [6.1](#sec-6-1)) kötve kell ellenőrizni, nem csak a globális szerepkör alapján.
+
+**Chat-jogosultság (tervezési javaslat, v0.16):** a beszélgetésekhez való hozzáférés nem a globális szerepkörön, hanem a résztvevőségen (`CONVERSATION_PARTICIPANT`) alapul — üzenetet küldeni, olvasni és a beszélgetésre feliratkozni csak annak aktív (`left_at` üres) résztvevője tud; ezt minden STOMP `SEND`/`SUBSCRIBE` keretnél és REST-előzménylekérésnél ellenőrizni kell. A banda-chat résztvevőit a `MEMBERSHIP` határozza meg. Üzenetet a küldője, banda-chatben a Leader is törölhet.
+
+> **HELYŐRZŐ:** az Admin hozzáférése mások privát beszélgetéseihez — a use case diagram szerint az Admin „mindent tud”, de mások privát üzeneteinek olvasása adatvédelmi szempontból nem indokolt; javaslat: az Admin csak bejelentett (moderálási) esetben, naplózottan férjen hozzá. Jóváhagyást igényel.
 
 <a id="sec-10-3"></a>
 
@@ -1108,7 +1229,7 @@ A tevékenységdiagram (7.1) "Hibaüzenet" lépései (sikertelen bejelentkezés/
 
 ### 12.2 Naplózás (logging) és monitorozás
 
-**Tervezési javaslat:** a backend a Java ökoszisztémában szokásos SLF4J/Logback naplózást használja, legalább az alábbi szintekkel: `ERROR` (kezeletlen kivételek), `WARN` (jogosultsági elutasítás, érvénytelen bemenet), `INFO` (fő üzleti események, pl. banda létrehozása, próba ütemezése).
+**Tervezési javaslat:** a backend a Java ökoszisztémában szokásos SLF4J/Logback naplózást használja, legalább az alábbi szintekkel: `ERROR` (kezeletlen kivételek), `WARN` (jogosultsági elutasítás, érvénytelen bemenet), `INFO` (fő üzleti események, pl. banda létrehozása, próba ütemezése). A chat-üzenetek tartalma (`MESSAGE.body`) semmilyen naplószinten nem kerülhet a naplóba — csak metaadatok (beszélgetés- és küldő-azonosító, időbélyeg).
 
 > **HELYŐRZŐ:** központi log-gyűjtés (pl. ELK/Loki) és monitorozó/riasztó rendszer (pl. Prometheus/Grafana) bevezetése — ez az üzemeltetési környezet (9. fejezet) kialakításával összhangban, a projekt méretének növekedésével válik indokolttá.
 
@@ -1125,6 +1246,7 @@ A tevékenységdiagram (7.1) "Hibaüzenet" lépései (sikertelen bejelentkezés/
 | Unit teszt (backend) | JUnit + Mockito | Service-réteg üzleti logikája (pl. jogosultság-ellenőrzés, validáció) |
 | Unit/komponens teszt (frontend) | React Testing Library | Egyes UI-komponensek viselkedése |
 | Integrációs teszt (backend) | Spring Boot Test (teszt-adatbázissal) | API-végpontok, adatbázis-műveletek |
+| Integrációs teszt (chat) | Spring Boot Test + STOMP teszt-kliens (`WebSocketStompClient`) | Valós idejű kézbesítés, résztvevő-ellenőrzés (nem résztvevő nem küldhet/kaphat üzenetet), banda-chat résztvevő-szinkronizáció tagság-változáskor |
 | End-to-end (E2E) teszt | Playwright vagy Cypress | A 7.1 fő folyamat (belépés/regisztráció → szerepkör szerinti funkció) és a use case-ek (3.2) végponttól végpontig |
 
 Minden use case-hez (3.2) legalább egy pozitív és egy negatív (pl. jogosultság hiányában elutasított) teszteset rendelendő.
@@ -1173,15 +1295,16 @@ Minden use case-hez (3.2) legalább egy pozitív és egy negatív (pl. jogosults
 | Activity diagram | Tevékenységdiagram (→ Mermaid `flowchart`) | [`diagrams/Activity.puml`](../diagrams/Activity.puml) | [`diagrams/mermaid/Activity.md`](../diagrams/mermaid/Activity.md) | Kész — konverzió |
 | C4 Context diagram | Architektúra, C4-PlantUML *(kanonikus)* → Mermaid átirat *(`flowchart`, C4-stílusú színezéssel — ld. [4.1](#sec-4-1) megjegyzés)* | [`diagrams/c4.puml`](../diagrams/c4.puml) `@startuml C4_Context` | [`diagrams/mermaid/Context.md`](../diagrams/mermaid/Context.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | C4 Container diagram | Architektúra, C4-PlantUML *(kanonikus)* → Mermaid átirat *(`flowchart`, C4-stílusú színezéssel)* | [`diagrams/c4.puml`](../diagrams/c4.puml) `@startuml C4_Container` | [`diagrams/mermaid/Container.md`](../diagrams/mermaid/Container.md) | **Tervezési javaslat — jóváhagyást igényel** |
-| C4 Component diagram | Architektúra, C4-PlantUML *(kanonikus, 1 teljes diagram)* → Mermaid átirat *(`flowchart`, 5 résznézetre bontva, olvashatóság miatt — ld. [4.1](#sec-4-1))* | [`diagrams/c4.puml`](../diagrams/c4.puml) `@startuml C4_Component` | [`diagrams/mermaid/Component.md`](../diagrams/mermaid/Component.md) | **Tervezési javaslat — jóváhagyást igényel** |
+| C4 Component diagram | Architektúra, C4-PlantUML *(kanonikus, 1 teljes diagram)* → Mermaid átirat *(`flowchart`, 6 résznézetre bontva, olvashatóság miatt — ld. [4.1](#sec-4-1))* | [`diagrams/c4.puml`](../diagrams/c4.puml) `@startuml C4_Component` | [`diagrams/mermaid/Component.md`](../diagrams/mermaid/Component.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | C4 Deployment diagram | Architektúra, kiegészítő, C4-PlantUML *(kanonikus)* → Mermaid átirat *(`flowchart`, C4-stílusú színezéssel)* | [`diagrams/c4.puml`](../diagrams/c4.puml) `@startuml C4_Deployment` | [`diagrams/mermaid/Deployment.md`](../diagrams/mermaid/Deployment.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | Adatmodell (ER diagram) | `erDiagram` | *nincs PlantUML forrás* | [`diagrams/mermaid/Adatmodell.md`](../diagrams/mermaid/Adatmodell.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | Tagság állapotgépe | `stateDiagram-v2` | *nincs PlantUML forrás* | [`diagrams/mermaid/TagsagAllapota.md`](../diagrams/mermaid/TagsagAllapota.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | Banda létrehozása (szekvencia) | `sequenceDiagram` | *nincs PlantUML forrás* | [`diagrams/mermaid/BandaLetrehozasa.md`](../diagrams/mermaid/BandaLetrehozasa.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | Próba létrehozása (szekvencia) | `sequenceDiagram` | *nincs PlantUML forrás* | [`diagrams/mermaid/ProbaLetrehozasa.md`](../diagrams/mermaid/ProbaLetrehozasa.md) | **Tervezési javaslat — jóváhagyást igényel** |
-| Activity — Common/Feed (14 use case) | Tevékenységdiagramok (`flowchart`) | *nincs PlantUML forrás* | [`diagrams/mermaid/ActivityCommon.md`](../diagrams/mermaid/ActivityCommon.md) | **Tervezési javaslat — jóváhagyást igényel** |
+| Üzenet küldése — chat (szekvencia) | `sequenceDiagram` | *nincs PlantUML forrás* | [`diagrams/mermaid/UzenetKuldes.md`](../diagrams/mermaid/UzenetKuldes.md) | **Tervezési javaslat — jóváhagyást igényel** |
+| Activity — Common/Feed/Üzenetküldés (15 use case) | Tevékenységdiagramok (`flowchart`) | *nincs PlantUML forrás* | [`diagrams/mermaid/ActivityCommon.md`](../diagrams/mermaid/ActivityCommon.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | Activity — Leader (7 use case) | Tevékenységdiagramok (`flowchart`) | *nincs PlantUML forrás* | [`diagrams/mermaid/ActivityLeader.md`](../diagrams/mermaid/ActivityLeader.md) | **Tervezési javaslat — jóváhagyást igényel** |
-| Activity — BandMember (6 use case) | Tevékenységdiagramok (`flowchart`) | *nincs PlantUML forrás* | [`diagrams/mermaid/ActivityMember.md`](../diagrams/mermaid/ActivityMember.md) | **Tervezési javaslat — jóváhagyást igényel** |
+| Activity — BandMember (7 use case) | Tevékenységdiagramok (`flowchart`) | *nincs PlantUML forrás* | [`diagrams/mermaid/ActivityMember.md`](../diagrams/mermaid/ActivityMember.md) | **Tervezési javaslat — jóváhagyást igényel** |
 | Activity — Admin (2 use case) | Tevékenységdiagramok (`flowchart`) | *nincs PlantUML forrás* | [`diagrams/mermaid/ActivityAdmin.md`](../diagrams/mermaid/ActivityAdmin.md) | **Tervezési javaslat — jóváhagyást igényel** |
 
 <a id="sec-16-2"></a>
@@ -1206,6 +1329,10 @@ Minden use case-hez (3.2) legalább egy pozitív és egy negatív (pl. jogosults
 | **Kategória (mentési)** | A Mentéshez tartozó, felhasználó által szabadon megadott címke (pl. "Kedvencek"), amely a mentett elemek rendszerezésére szolgál; nincs előre rögzített, rendszerszintű kategórialista. |
 | **Feliratkozás (Event signup)** | Egy User részvételi szándékának jelzése egy próbára vagy koncertre (CalendarEvent) — ld. [3.2](#sec-3-2), [6.1](#sec-6-1). |
 | **Szavazás (Poll)** | Egy Leader által, egy adott bandán belül létrehozott kérdés és opciólista, amelyre a banda tagjai (BandMember, Leader) szavazatot adhatnak le — ld. [3.2](#sec-3-2), [6.1](#sec-6-1). |
+| **Beszélgetés (Conversation)** | A chat alapegysége: két vagy több felhasználó közötti üzenetfolyam, típusa privát vagy banda-chat — ld. [6.1](#sec-6-1). |
+| **Privát chat** | Két felhasználó közötti 1:1 beszélgetés; felhasználópáronként legfeljebb egy. |
+| **Banda-chat** | A rendszer egyetlen csoportos beszélgetés-formája: a bandához automatikusan tartozó beszélgetés, amelynek résztvevői mindig a banda aktív tagjai. |
+| **Üzenet (Message)** | Egy beszélgetésben elküldött szöveges üzenet; az online résztvevőknek valós időben (WebSocket) kézbesül. |
 
 > **HELYŐRZŐ:** további, projektspecifikus fogalmak bővítendők.
 
@@ -1230,3 +1357,4 @@ Minden use case-hez (3.2) legalább egy pozitív és egy negatív (pl. jogosults
 | 0.13 | 2026-09-24 | HELYŐRZŐ | **Javítva a Container-, Component- és Deployment-diagram (4.1, 9.1) olvashatatlansága** — ugyanazzal a helyi `plantuml`/`@mermaid-js/mermaid-cli` diagnosztikával, mint a 0.12-es Context-javításnál. (1) **Container-diagram:** a kapcsolat- és határdoboz-feliratok lerövidítve (pl. "Bandhub rendszer (konténerizált szerveroldal)" → "Bandhub rendszer"), amelyek korábban egymásra futottak. (2) **Component-diagram:** a teljes, 10 elemű/~19 kapcsolatú ábra a Mermaid-renderelőben átláthatatlan volt — a szereplőnkénti Use Case-felbontáshoz hasonló elvvel (ld. [3.2](#sec-3-2)) **4 résznézetre bontva** (Kérés-útvonal, Jogosultság-ellenőrzés, Adatbázis-/objektumtár-elérés, Értesítések kiváltása); a teljes, egyben látható diagram a kanonikus `diagrams/c4.puml`-ben marad (ott a PlantUML-motor jól renderelte, nem kellett bontani). (3) **Deployment-diagram:** a kapcsolat-feliratok rövidítve (pl. "API-hívásokat továbbít [REST/JSON]" → "Továbbítás [REST/JSON]"), amelyek a "backend konténer" dobozra futottak. Mindhárom Mermaid-fájlban ([`Container.md`](../diagrams/mermaid/Container.md), [`Component.md`](../diagrams/mermaid/Component.md), [`Deployment.md`](../diagrams/mermaid/Deployment.md)) és a beágyazott doc-másolatokban egyaránt átvezetve; a kanonikus `c4.puml` csak a Context-javításból örökölt rövidítést tartalmazza, a többi diagramon nem kellett módosítani. Tartalmi/funkcionális változás nincs, kizárólag a diagramok olvashatósága javult. Érintett fejezetek: 4.1, 9.1, 16.1. |
 | 0.14 | 2026-09-24 | HELYŐRZŐ | **Tovább finomítva a Container- és Component-diagram (4.1) olvashatósága**, miután a 0.13-as javítás után is maradt kisebb átfedés. (1) **Container-diagram:** a határdoboz felirata "Bandhub rendszer" → "Bandhub" (egy szóra) rövidítve — két szóval még mindig egy sorba esett a "Felhasználó → Mobil kliens" kapcsolat feliratával. (2) **Component-diagram:** helyi `mermaid-cli` teszteléssel megállapítva, hogy a Mermaid C4-motorja legfeljebb 2-3, egy célba (pl. Security modul vagy Adatbázis) futó forrás-nyilat tud átfedés nélkül elrendezni — ennél többnél a kétsoros elrendezés miatt a nyilak/feliratok keresztülfutnak a köztes dobozokon, amit a `UpdateLayoutConfig(...)` irányítás nem korrigál (a Mermaid C4-implementációja figyelmen kívül hagyja, ellentétben a hivatalos C4-PlantUML-lel). Emiatt a korábbi 4 résznézet közül a **Jogosultság-ellenőrzés** (4 forrás) és az **Adatbázis-/objektumtár-elérés** (5 forrás) 2-2, illetve 3+2 forrásos résznézetre bontva — összesen **6 résznézet** lett a korábbi 4 helyett. Mindegyik résznézetet egyenként lerendereltem, átfedés nélkül. A kanonikus `diagrams/c4.puml`-t nem érinti (ott egyben, jól renderelve marad). Tartalmi/funkcionális változás nincs. Érintett fejezetek: 4.1, 16.1. |
 | 0.15 | 2026-09-24 | HELYŐRZŐ | **Gyökérokra visszavezetve és véglegesen javítva a C4 Mermaid-diagramok olvashatatlansága.** A 0.12–0.14-es javítások (felirat-rövidítés, résznézetekre bontás) a `mermaid-cli`-vel tesztelve tisztán renderelődtek, de a felhasználó VS Code Markdown Preview Enhanced bővítményében (screenshot alapján) továbbra is egymásra futottak a szövegek — még a legegyszerűbb Context-diagramnál is. Helyi teszteléssel (különböző renderelési szélességeken összehasonlítva) beazonosítva: a Mermaid `C4Context`/`C4Container`/`C4Component`/`C4Deployment` diagramtípus **a megjelenítés szélességétől függően újraszámolja a belső elrendezést** (nem csak egységesen kicsinyíti a képet) — keskeny nézetben (pl. egy osztott szerkesztőpanel) ez szisztematikusan egymásra futó feliratokat eredményez, függetlenül a korábbi felirat-rövidítésektől. A sima `flowchart` diagramtípus (amit a dokumentum összes többi Mermaid-ábrája — Use Case, Activity, ER stb. — is problémamentesen használ) ezzel szemben mindig a tartalom természetes méretében számol, és a megjelenítő csak egységesen kicsinyíti — ez bizonyítottan (`mermaid-cli`-vel 300–1500px széles tartományban tesztelve) szélességtől függetlenül stabil. **Mind a négy Mermaid-diagram (`Context.md`, `Container.md`, `Component.md`, `Deployment.md`) át van írva `flowchart`-ra**, C4-stílusú színezéssel (Person: sötétkék, Container/System: kék, Component: világoskék, External: szürke) és a `System_Boundary`/`Container_Boundary`/`Deployment_Node` helyett `subgraph`-okkal. A `flowchart` jobb fan-in-kezelése miatt a Component-diagram Jogosultság-ellenőrzés résznézete visszavonható volt 1 diagramra (4 forrás átfedés nélkül fér el); az 5 forrású Adatbázis-elérés továbbra is 2 résznézetben marad (ott a `flowchart`-tal is maradt enyhe átfedés). Összesen **5 Component-résznézet** a korábbi 6 helyett. A kanonikus `diagrams/c4.puml` egyik diagramját sem érinti (a PlantUML-motor nem szenved ettől a hibától). Tartalmi/funkcionális változás nincs. Érintett fejezetek: 4.1, 9.1, 16.1. |
+| 0.16 | 2026-10-01 | HELYŐRZŐ | **Új funkció: privát és banda-chat.** 2 új use case: **Privát chat** (új „Üzenetküldés (minden felhasználó)” csomag, minden szerepkörnek) és **Banda-chat használata** (BandMember csomag — a rendszer egyetlen csoportos chat-formája, minden bandához automatikusan tartozó, a tagsággal szinkronizált beszélgetés, a Leader moderálhatja). 3 új entitás: `CONVERSATION` (típus: privat/banda), `CONVERSATION_PARTICIPANT`, `MESSAGE`. Architektúra: új **Üzenetkezelő (Chat) modul** (Spring WebSocket + STOMP, beépített simple broker — új konténer nélkül), a kliens–Nginx–Backend kapcsolatok WebSocket-forgalommal bővültek; a C4 Component-diagram új, 6. résznézettel bővült (a kanonikus `diagrams/c4.puml` is frissítve). Új szekvenciadiagram ([`UzenetKuldes.md`](../diagrams/mermaid/UzenetKuldes.md)) és 2 új activity diagram (29→31). Biztonság: résztvevőség-alapú chat-jogosultság, JWT a STOMP `CONNECT` keretben, üzenettartalom nem naplózható; nyitott kérdés az Admin hozzáférése privát üzenetekhez. Érintett fejezetek: 2.1–2.3, 3.1–3.3, 4.1–4.3, 5.1–5.3, 6.1–6.3, 7.2, 7.3, 8, 9.1, 9.3, 10.1, 10.2, 12.2, 13, 16.1–16.3. |

@@ -24,9 +24,15 @@ erDiagram
     POLL ||--o{ POLL_OPTION : "valasztasi lehetosegei"
     POLL_OPTION ||--o{ POLL_VOTE : "szavazatai"
     USER ||--o{ POLL_VOTE : "szavaz"
+    USER ||--o{ CONVERSATION : "letrehozza"
+    BAND ||--o| CONVERSATION : "banda-chat (opcionalis)"
+    CONVERSATION ||--o{ CONVERSATION_PARTICIPANT : "resztvevoi"
+    USER ||--o{ CONVERSATION_PARTICIPANT : "resztvesz"
+    CONVERSATION ||--o{ MESSAGE : "uzenetei"
+    USER ||--o{ MESSAGE : "kuld"
 ```
 
-A `POST`, `FOLLOW` és `POST_LIKE` entitások a Tartalom-feed (Instagram-szerű videó-/zenefeed) funkciót szolgálják ki — ld. [Rendszerdokumentacio.md 3.2](../../docs/Rendszerdokumentacio.md#sec-3-2) "Tartalom-feed" csomag és [6.1](../../docs/Rendszerdokumentacio.md#sec-6-1). A `SAVED_ITEM`, `EVENT_SIGNUP`, `POLL`/`POLL_OPTION`/`POLL_VOTE` entitások a v0.10-ben bevezetett Tartalom mentése, Eseményre feliratkozás és Banda-belüli szavazás funkciókat szolgálják ki — ld. ugyanott. A tényleges PostgreSQL DDL az implementációs fázis feladata; ez a dokumentum a tervezési szintű entitás-/mezőlistát rögzíti.
+A `POST`, `FOLLOW` és `POST_LIKE` entitások a Tartalom-feed (Instagram-szerű videó-/zenefeed) funkciót szolgálják ki — ld. [Rendszerdokumentacio.md 3.2](../../docs/Rendszerdokumentacio.md#sec-3-2) "Tartalom-feed" csomag és [6.1](../../docs/Rendszerdokumentacio.md#sec-6-1). A `SAVED_ITEM`, `EVENT_SIGNUP`, `POLL`/`POLL_OPTION`/`POLL_VOTE` entitások a v0.10-ben bevezetett Tartalom mentése, Eseményre feliratkozás és Banda-belüli szavazás funkciókat szolgálják ki — ld. ugyanott. A `CONVERSATION`, `CONVERSATION_PARTICIPANT` és `MESSAGE` entitások a v0.16-ban bevezetett Privát chat és Banda-chat funkciókat szolgálják ki — ld. lent a „Chat” szakaszt. A tényleges PostgreSQL DDL az implementációs fázis feladata; ez a dokumentum a tervezési szintű entitás-/mezőlistát rögzíti.
 
 ## Entitások mezői
 
@@ -96,6 +102,24 @@ A `POST`, `FOLLOW` és `POST_LIKE` entitások a Tartalom-feed (Instagram-szerű 
 | POLL_VOTE | option_id | uuid | a leadott szavazat szerinti `POLL_OPTION` |
 | POLL_VOTE | user_id | uuid | a szavazó USER (a banda tagja) |
 | POLL_VOTE | voted_at | datetime | |
+| CONVERSATION | id | uuid | |
+| CONVERSATION | type | string | privat / banda |
+| CONVERSATION | band_id | uuid | opcionális — csak `type = banda` esetén, bandánként egyedi |
+| CONVERSATION | created_by | uuid | a létrehozó USER (privát chatnél az indító fél, banda-chatnél a banda Leadere) |
+| CONVERSATION | created_at | datetime | |
+| CONVERSATION_PARTICIPANT | id | uuid | |
+| CONVERSATION_PARTICIPANT | conversation_id | uuid | |
+| CONVERSATION_PARTICIPANT | user_id | uuid | |
+| CONVERSATION_PARTICIPANT | joined_at | datetime | |
+| CONVERSATION_PARTICIPANT | last_read_at | datetime | az utoljára olvasott időpont — az olvasatlan-számláló alapja |
+| CONVERSATION_PARTICIPANT | left_at | datetime | opcionális — kilépés/eltávolítás időpontja (a korábbi üzenetek megmaradnak) |
+| MESSAGE | id | uuid | |
+| MESSAGE | conversation_id | uuid | |
+| MESSAGE | sender_id | uuid | a küldő USER |
+| MESSAGE | body | text | az üzenet szövege (az MVP-ben csak szöveg) |
+| MESSAGE | created_at | datetime | |
+| MESSAGE | edited_at | datetime | opcionális |
+| MESSAGE | deleted_at | datetime | opcionális — soft delete (a küldő, banda-chatben a Leader is törölhet) |
 
 ## Feed-personalizáció (tervezési javaslat)
 
@@ -114,3 +138,11 @@ Ez a personalizáció csak a *sorrendet* befolyásolja — minden felhasználó 
 - **Szavazás (`POLL`/`POLL_OPTION`/`POLL_VOTE`):** kizárólag egy adott bandán belül értelmezett — a szavazást csak az adott banda Leadere hozhatja létre (`POLL.created_by`), és csak az adott banda tagjai (BandMember és a Leader) szavazhatnak. Egy felhasználó pollonként egy szavazatot adhat le (egyediségi kényszer, implementáció során rögzítendő).
 
 > **HELYŐRZŐ:** a fenti négy új entitás (`SAVED_ITEM`, kiterjesztett `FOLLOW`, `EVENT_SIGNUP`, `POLL`/`POLL_OPTION`/`POLL_VOTE`) jóváhagyása/pontosítása a tényleges adatbázis-tervezéskor; mezőnevek, típusok, megszorítások (pl. `POLL_VOTE` egyediségi kényszer felhasználónként/pollonként) még nem véglegesek.
+
+## Chat — kiegészítő megjegyzések (tervezési javaslat, v0.16)
+- **Egy közös modell, két típus:** a privát és a banda-chat ugyanaz a `CONVERSATION` entitás, a `type` mező különbözteti meg őket — így az üzenetküldés, a kézbesítés és az olvasottság logikája egyetlen helyen valósul meg.
+- **Privát (`type = privat`):** pontosan 2 résztvevő; egy felhasználópár között legfeljebb egy privát beszélgetés létezhet (egyediségi kényszer, implementáció során rögzítendő) — ismételt indításkor a meglévő nyílik meg.
+- **Banda-chat (`type = banda`):** ez az egyetlen csoportos beszélgetés-típus (tetszőleges felhasználókból álló csoport nem hozható létre); bandánként pontosan egy, a banda létrehozásakor jön létre, neve a banda neve; résztvevői a banda `MEMBERSHIP`-jeiből szinkronizálódnak (a tagság `Aktiv` állapotba lépésekor bekerül, `Eltavolitva` állapotba lépésekor a `left_at` kitöltődik — ld. [TagsagAllapota.md](TagsagAllapota.md)).
+- **Olvasatlan üzenetek:** egy résztvevő olvasatlan üzenetei a `MESSAGE.created_at > CONVERSATION_PARTICIPANT.last_read_at` feltétellel számolhatók — üzenetenkénti „olvasta” tábla az MVP-ben nem szükséges.
+
+> **HELYŐRZŐ:** fájl-/képküldés a chatben (a meglévő Objektumtár újrahasznosításával), üzenetkeresés, „gépel…” jelzés és üzenetenkénti olvasási visszaigazolás — ezek nem részei a jelenlegi javaslatnak, bevezetésük külön döntést igényel.

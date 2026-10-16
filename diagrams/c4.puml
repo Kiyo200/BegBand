@@ -13,7 +13,7 @@
 title Bandhub - Rendszerkontextus
 
 Person(user, "Felhasználó", "Zenész: User / Leader / BandMember / Admin szerepkörben")
-System(bandhub, "Bandhub", "Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása")
+System(bandhub, "Bandhub", "Banda-szervező webalkalmazás: bandák, tagság, próbák, koncertek, eseménynaptár, zenei/videó tartalom megosztása, privát és banda-chat")
 System_Ext(email, "E-mail szolgáltató", "Tranzakciós e-mailek (regisztráció, meghívók, próba-/koncertértesítés) kiküldése, pl. SMTP relay szolgáltatón keresztül")
 
 Rel(user, bandhub, "Regisztrál, bejelentkezik, tartalmat kezel", "HTTPS")
@@ -34,9 +34,9 @@ System_Boundary(bandhub, "Bandhub rendszer (konténerizált szerveroldal)") {
     Container(web, "Web kliens", "React + TypeScript (SPA)", "Böngészőből elérhető felhasználói felület")
     Container(desktop, "Asztali kliens", "C# / WPF", "Windows asztali alkalmazás")
     Container(mobile, "Mobil kliens", "Kotlin (Android)", "Mobilalkalmazás")
-    Container(nginx, "Reverse proxy", "Nginx", "Web kliens statikus kiszolgálása, API-forgalom proxyzása és TLS-terminálása minden kliens számára")
-    Container(backend, "Backend API", "Java 21 + Spring Boot", "Üzleti logika, jogosultságkezelés (JWT), REST API — közös minden kliens számára")
-    ContainerDb(db, "Adatbázis", "PostgreSQL", "Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai")
+    Container(nginx, "Reverse proxy", "Nginx", "Web kliens statikus kiszolgálása, API- és WebSocket-forgalom proxyzása, TLS-terminálás minden kliens számára")
+    Container(backend, "Backend API", "Java 21 + Spring Boot", "Üzleti logika, jogosultságkezelés (JWT), REST API és WebSocket (chat) — közös minden kliens számára")
+    ContainerDb(db, "Adatbázis", "PostgreSQL", "Felhasználók, bandák, tagságok, próbák, koncertek, események, posztok metaadatai, chat-üzenetek")
     ContainerDb(storage, "Objektumtár", "MinIO (S3-kompatibilis)", "Feltöltött zene-/videófájlok, borító- és profilképek")
 }
 
@@ -46,10 +46,10 @@ Rel(user, web, "Használja", "HTTPS, böngészőből")
 Rel(user, desktop, "Használja")
 Rel(user, mobile, "Használja")
 
-Rel(web, nginx, "Betöltés + API hívások", "HTTPS")
-Rel(desktop, nginx, "API hívások", "REST/JSON, HTTPS")
-Rel(mobile, nginx, "API hívások", "REST/JSON, HTTPS")
-Rel(nginx, backend, "API-hívásokat továbbít", "REST/JSON")
+Rel(web, nginx, "Betöltés + API hívások + chat", "HTTPS, WSS")
+Rel(desktop, nginx, "API hívások + chat", "REST/JSON, WSS")
+Rel(mobile, nginx, "API hívások + chat", "REST/JSON, WSS")
+Rel(nginx, backend, "API-hívásokat továbbít", "REST/JSON, WebSocket")
 
 Rel(backend, db, "Olvas / ír", "JDBC/SQL")
 Rel(backend, storage, "Fájl feltöltés / lekérés", "S3 API")
@@ -74,24 +74,29 @@ Container_Boundary(backend, "Backend API (Java 21 + Spring Boot)") {
     Component(eventSvc, "Próba-/koncert-/naptármodul", "Controller/Service/Repository", "Próbák és koncertek létrehozása/kezelése/megtekintése, eseménynaptár összesített megjelenítése, eseményre feliratkozás")
     Component(contentSvc, "Tartalomkezelő modul", "Controller/Service/Repository", "Zene/videó posztolása, keresése, kedvelés, banda- és előadókövetés, személyre szabott feed összeállítása, tartalom mentése kategóriákkal")
     Component(notifySvc, "Értesítő modul", "Service", "E-mail értesítések összeállítása és küldése (csatlakozási kérelem, meghívó, emlékeztető)")
+    Component(chatSvc, "Üzenetkezelő (Chat) modul", "Spring WebSocket + STOMP, Controller/Service/Repository", "Privát és banda-chat beszélgetések, üzenetek tárolása és valós idejű kézbesítése, olvasatlan üzenetek, előzmények lapozott lekérése")
 }
 
 ContainerDb(db, "Adatbázis", "PostgreSQL")
 ContainerDb(storage, "Objektumtár", "MinIO")
 System_Ext(email, "E-mail szolgáltató", "SMTP relay")
 
-Rel(client, nginx, "REST/JSON", "HTTPS")
+Rel(client, nginx, "REST/JSON + WebSocket", "HTTPS, WSS")
 
 Rel(nginx, security, "Bejelentkezés / regisztráció", "REST/JSON")
 Rel(nginx, userSvc, "REST/JSON")
 Rel(nginx, bandSvc, "REST/JSON")
 Rel(nginx, eventSvc, "REST/JSON")
 Rel(nginx, contentSvc, "REST/JSON")
+Rel(nginx, chatSvc, "WebSocket (STOMP) + REST/JSON", "WSS")
 
 Rel(userSvc, security, "Jogosultság-ellenőrzés")
 Rel(bandSvc, security, "Jogosultság-ellenőrzés")
 Rel(eventSvc, security, "Jogosultság-ellenőrzés")
 Rel(contentSvc, security, "Jogosultság-ellenőrzés")
+Rel(chatSvc, security, "JWT + résztvevő-ellenőrzés")
+
+Rel(bandSvc, chatSvc, "Tagság-változás: banda-chat résztvevők szinkronizálása")
 
 Rel(eventSvc, notifySvc, "Meghívó / emlékeztető kiváltása")
 Rel(bandSvc, notifySvc, "Tagsági értesítés kiváltása")
@@ -104,6 +109,7 @@ Rel(userSvc, db, "Olvas/ír", "JDBC/SQL")
 Rel(bandSvc, db, "Olvas/ír", "JDBC/SQL")
 Rel(eventSvc, db, "Olvas/ír", "JDBC/SQL")
 Rel(contentSvc, db, "Olvas/ír", "JDBC/SQL")
+Rel(chatSvc, db, "Olvas/ír", "JDBC/SQL")
 
 SHOW_LEGEND()
 @enduml
@@ -123,10 +129,10 @@ Deployment_Node(userDevice, "Felhasználó eszköze", "Böngésző / Windows PC 
 Deployment_Node(appServer, "Alkalmazásszerver", "Linux + Docker Engine") {
     Deployment_Node(compose, "Docker Compose stack", "docker-compose.yml") {
         Deployment_Node(nginxNode, "nginx konténer", "image: nginx:alpine") {
-            Container(nginx, "Reverse proxy", "Nginx", "TLS-terminálás, statikus kiszolgálás, API-proxy")
+            Container(nginx, "Reverse proxy", "Nginx", "TLS-terminálás, statikus kiszolgálás, API- és WebSocket-proxy")
         }
         Deployment_Node(backendNode, "backend konténer", "image: bandhub-backend") {
-            Container(backend, "Backend API", "Java 21 + Spring Boot", "REST API")
+            Container(backend, "Backend API", "Java 21 + Spring Boot", "REST API + WebSocket (chat)")
         }
         Deployment_Node(dbNode, "db konténer", "image: postgres:16") {
             ContainerDb(db, "Adatbázis", "PostgreSQL", "Perzisztens Docker volume-on")
@@ -141,10 +147,10 @@ Deployment_Node(emailInfra, "E-mail szolgáltató infrastruktúrája", "külső,
     System_Ext(email, "E-mail szolgáltató", "Tranzakciós e-mailek kiküldése")
 }
 
-Rel(web, nginx, "Betöltés + API hívások", "HTTPS")
-Rel(desktop, nginx, "API hívások", "REST/JSON, HTTPS")
-Rel(mobile, nginx, "API hívások", "REST/JSON, HTTPS")
-Rel(nginx, backend, "API-hívásokat továbbít", "REST/JSON")
+Rel(web, nginx, "Betöltés + API hívások + chat", "HTTPS, WSS")
+Rel(desktop, nginx, "API hívások + chat", "REST/JSON, WSS")
+Rel(mobile, nginx, "API hívások + chat", "REST/JSON, WSS")
+Rel(nginx, backend, "API-hívásokat továbbít", "REST/JSON, WebSocket")
 Rel(backend, db, "Olvas / ír", "JDBC/SQL")
 Rel(backend, storage, "Fájl feltöltés / lekérés", "S3 API")
 Rel(backend, email, "Értesítést küld", "SMTP")

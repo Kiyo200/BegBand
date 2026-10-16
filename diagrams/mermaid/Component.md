@@ -2,7 +2,9 @@
 
 > **Ajánlott architektúra (C4 szint 3).** A Backend API belső moduljai. Mindhárom kliens (Web/Asztali/Mobil, ld. [Container.md](Container.md)) ugyanazt a REST API-t hívja, platformspecifikus különbség nélkül — a [Container.md](Container.md)-ben leírtaknak megfelelően a hívások ténylegesen a Reverse proxyn (Nginx) keresztül érkeznek, ezért az szerepel a diagramon a kliensek és a Backend API modulok között (a diagram belső pontossága érdekében ez itt nem hagyható el). A korábbi tervezetben külön szereplő Próba-/koncert- és Naptár modult, illetve a Zenei tartalom- és Tartalom-feed modult itt egy-egy komponensbe vontam össze (Próba-/koncert-/naptármodul, Tartalomkezelő modul) — a kettéválasztás nem indokolt méretű felelősségi kört jelentett volna, és feleslegesen bonyolította a kapcsolatrendszert. Kanonikus forrás (hivatalos C4-PlantUML), **egyetlen, teljes diagramként**: [`../c4.puml`](../c4.puml) `C4_Component` blokk — ld. [c4.md](c4.md).
 >
-> **Megjegyzés (v0.15) — miért `flowchart`, nem `C4Component`:** ld. [Context.md](Context.md) azonos megjegyzését a Mermaid C4-diagramtípus keskeny-nézeti hibájáról. A `flowchart`-ra váltás — amellett, hogy szélességtől függetlenül stabil — azt is lehetővé tette, hogy a korábbi, erősen felbontott résznézeteket kicsit összevonjuk: a `flowchart` motorja egy célba (pl. Security modul) futó 4 forrás-nyilat még átfedés nélkül el tud rendezni (ellentétben a Mermaid C4-motorjával, amely ennél már 2-3 forrásnál is összefolyt), ezért a **Jogosultság-ellenőrzés** most egyetlen diagram (a korábbi 2 rész helyett). Az 5 forrásból egy célba (Adatbázis) futó eset viszont `flowchart`-tal is enyhe átfedést produkált teszteléskor, ezért az **Adatbázis-elérés** továbbra is 2 résznézetre van bontva. Összesen **5 résznézet** a korábbi 4/6 helyett. A teljes, egyben látható diagram a kanonikus [`../c4.puml`](../c4.puml) `C4_Component` blokkjában, illetve a [Rendszerdokumentacio.md 5.1](../../docs/Rendszerdokumentacio.md#sec-5-1) táblázatában érhető el.
+> **Megjegyzés (v0.15) — miért `flowchart`, nem `C4Component`:** ld. [Context.md](Context.md) azonos megjegyzését a Mermaid C4-diagramtípus keskeny-nézeti hibájáról. A `flowchart`-ra váltás — amellett, hogy szélességtől függetlenül stabil — azt is lehetővé tette, hogy a korábbi, erősen felbontott résznézeteket kicsit összevonjuk: a `flowchart` motorja egy célba (pl. Security modul) futó 4 forrás-nyilat még átfedés nélkül el tud rendezni (ellentétben a Mermaid C4-motorjával, amely ennél már 2-3 forrásnál is összefolyt), ezért a **Jogosultság-ellenőrzés** most egyetlen diagram (a korábbi 2 rész helyett). Az 5 forrásból egy célba (Adatbázis) futó eset viszont `flowchart`-tal is enyhe átfedést produkált teszteléskor, ezért az **Adatbázis-elérés** továbbra is 2 résznézetre van bontva. Összesen **5 résznézet** a korábbi 4/6 helyett.
+>
+> **Megjegyzés (v0.16) — Chat modul:** az új **Üzenetkezelő (Chat) modul** az 1. résznézetben (kérés-útvonal) szerepel, többi kapcsolata (Security, Adatbázis, Bandakezelő) viszont egy külön, **6. résznézetben** — így a Jogosultság-ellenőrzés (4 forrás) és az Adatbázis-elérés (3+2 forrás) résznézetek fan-in-je nem nő a fent leírt, átfedést okozó szint fölé. Összesen **6 résznézet**. A teljes, egyben látható diagram a kanonikus [`../c4.puml`](../c4.puml) `C4_Component` blokkjában, illetve a [Rendszerdokumentacio.md 5.1](../../docs/Rendszerdokumentacio.md#sec-5-1) táblázatában érhető el.
 
 ## 1. Kérés-útvonal (Nginx → modulok)
 
@@ -15,18 +17,20 @@ flowchart TD
     bandSvc["<b>Bandakezelő modul</b><br/><i>Controller/Service/Repository</i><br/>Banda, tagság, szavazás"]
     eventSvc["<b>Próba-/koncert-/naptármodul</b><br/><i>Controller/Service/Repository</i><br/>Próba, koncert, feliratkozás"]
     contentSvc["<b>Tartalomkezelő modul</b><br/><i>Controller/Service/Repository</i><br/>Zene/videó, feed, mentés, követés"]
+    chatSvc["<b>Üzenetkezelő (Chat) modul</b><br/><i>Spring WebSocket + STOMP</i><br/>Privát és banda-chat"]
 
-    client -->|"REST/JSON<br/>[HTTPS]"| nginx
+    client -->|"REST/JSON + WebSocket<br/>[HTTPS, WSS]"| nginx
     nginx -->|"Bejelentkezés / regisztráció<br/>[REST/JSON]"| security
     nginx -->|"REST/JSON"| userSvc
     nginx -->|"REST/JSON"| bandSvc
     nginx -->|"REST/JSON"| eventSvc
     nginx -->|"REST/JSON"| contentSvc
+    nginx -->|"WebSocket (STOMP)<br/>+ REST/JSON"| chatSvc
 
     classDef container fill:#1168BD,stroke:#0B4884,color:#fff
     classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
     class client,nginx container
-    class security,userSvc,bandSvc,eventSvc,contentSvc component
+    class security,userSvc,bandSvc,eventSvc,contentSvc,chatSvc component
 ```
 
 ## 2. Jogosultság-ellenőrzés (RBAC)
@@ -103,4 +107,25 @@ flowchart TD
     classDef external fill:#8A8A8A,stroke:#6B6B6B,color:#fff
     class bandSvc,eventSvc,notifySvc component
     class email external
+```
+
+## 6. Valós idejű üzenetküldés (Chat)
+
+```mermaid
+flowchart TD
+    nginx["<b>Reverse proxy</b><br/><i>Nginx</i><br/>WebSocket-kapcsolat továbbítása"]
+    bandSvc["<b>Bandakezelő modul</b><br/><i>Controller/Service/Repository</i><br/>Banda, tagság, szavazás"]
+    chatSvc["<b>Üzenetkezelő (Chat) modul</b><br/><i>Spring WebSocket + STOMP</i><br/>Privát és banda-chat, valós idejű kézbesítés"]
+    security["<b>Security / Auth modul</b><br/><i>Spring Security + JWT</i><br/>Token-validálás"]
+    db[("<b>Adatbázis</b><br/><i>PostgreSQL</i>")]
+
+    nginx -->|"Üzenetek + előzmények<br/>[WSS / STOMP, REST/JSON]"| chatSvc
+    bandSvc -->|"Tagság-változás:<br/>banda-chat résztvevők szinkronizálása"| chatSvc
+    chatSvc -->|"JWT + résztvevő-ellenőrzés"| security
+    chatSvc -->|"Olvas/ír<br/>[JDBC/SQL]"| db
+
+    classDef container fill:#1168BD,stroke:#0B4884,color:#fff
+    classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
+    class nginx,db container
+    class bandSvc,chatSvc,security component
 ```
