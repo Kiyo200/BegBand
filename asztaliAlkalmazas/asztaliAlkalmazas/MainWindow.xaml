@@ -5,8 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:asztaliAlkalmazas"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        WindowState="Maximized"
+        Title="MainWindow" MinWidth="1000" MinHeight="600">
     <Grid>
+        <Grid x:Name="loginAblak" Visibility="Visible">
+            <Border Width="380"
+                    Padding="30"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="Admin felület"
+                               FontSize="24" FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,25"/>
 
+                    <TextBlock Text="Felhasználónév:"/>
+                    <TextBox x:Name="txtUsername" Height="30" Margin="0,5,0,15" VerticalContentAlignment="Center"/>
+
+                    <TextBlock Text="Jelszó:"/>
+                    <PasswordBox x:Name="txtPassword" Height="30" Margin="0,5,0,20" VerticalContentAlignment="Center"/>
+
+                    <Button Content="Bejelentkezés" Height="35" Click="login_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+        <Grid x:Name="mainAblak" Visibility="Collapsed" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" Margin="0,0,0,20">
+                <Button Content="Kijelentkezés" DockPanel.Dock="Right"
+                        Width="120" Height="30" Click="logout_Click"/>
+                <TextBlock Text="Bandák kezelése" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
+            </DockPanel>
+            
+            <DataGrid x:Name="dgBandak" Grid.Row="1" AutoGenerateColumns="True" ColumnWidth="*"/>
+        </Grid>
     </Grid>
 </Window>

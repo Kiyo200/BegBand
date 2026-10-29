@@ -20,5 +20,28 @@ namespace asztaliAlkalmazas
         {
             InitializeComponent();
         }
+        private void login_Click(object sender, RoutedEventArgs e)
+        {
+            showMain();
+        }
+
+        private void logout_Click(object sender, RoutedEventArgs e)
+        {
+            txtUsername.Clear();
+            txtPassword.Clear();
+            showLogin();
+        }
+
+        private void showMain()
+        {
+            loginAblak.Visibility = Visibility.Collapsed;
+            mainAblak.Visibility = Visibility.Visible;
+        }
+
+        private void showLogin()
+        {
+            mainAblak.Visibility = Visibility.Collapsed;
+            loginAblak.Visibility = Visibility.Visible;
+        }
     }
 }
