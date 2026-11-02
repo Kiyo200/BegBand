@@ -1,6 +1,9 @@
 .DS_Store
 .env
 .neon
-
 .env.local
 node_modules
+.vs/
+**/.vs/
+bin/
+obj/
