@@ -40,8 +40,11 @@ namespace asztaliAlkalmazas
 
         private void showLogin()
         {
+            txtUsername.Text = "";
+            txtPassword.Password = "";
             mainAblak.Visibility = Visibility.Collapsed;
             loginAblak.Visibility = Visibility.Visible;
         }
+
     }
 }

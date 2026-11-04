@@ -6,26 +6,42 @@
         xmlns:local="clr-namespace:asztaliAlkalmazas"
         mc:Ignorable="d"
         WindowState="Maximized"
+        ResizeMode="NoResize"
         Title="MainWindow" MinWidth="1000" MinHeight="600">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1A1A1A" Offset="0"/>
+                <GradientStop Color="#101010" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid x:Name="loginAblak" Visibility="Visible">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#2B003D" Offset="0"/>
+                    <GradientStop Color="#101010" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <Border Width="380"
                     Padding="30"
-                    BorderBrush="LightGray"
-                    BorderThickness="1"
+                    BorderBrush="#FF2D0953"
+                    BorderThickness="8"
                     CornerRadius="8"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    Background="#FF161616">
                 <StackPanel>
-                    <TextBlock Text="Admin felület"
+                    <TextBlock Text="BandHub Admin felület"
                                FontSize="24" FontWeight="Bold"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,25"/>
+                               Margin="0,0,0,25"
+                               FontFamily="Segoe UI Black"
+                               Foreground="white"/>
 
-                    <TextBlock Text="Felhasználónév:"/>
+                    <TextBlock Text="Felhasználónév:" Foreground="white" FontWeight="Bold"/>
                     <TextBox x:Name="txtUsername" Height="30" Margin="0,5,0,15" VerticalContentAlignment="Center"/>
 
-                    <TextBlock Text="Jelszó:"/>
+                    <TextBlock Text="Jelszó:" Foreground="white" FontWeight="Bold"/>
                     <PasswordBox x:Name="txtPassword" Height="30" Margin="0,5,0,20" VerticalContentAlignment="Center"/>
 
                     <Button Content="Bejelentkezés" Height="35" Click="login_Click"/>
@@ -33,18 +49,56 @@
             </Border>
         </Grid>
         <Grid x:Name="mainAblak" Visibility="Collapsed" Margin="20">
+
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <DockPanel Grid.Row="0" Margin="0,0,0,20">
-                <Button Content="Kijelentkezés" DockPanel.Dock="Right"
-                        Width="120" Height="30" Click="logout_Click"/>
-                <TextBlock Text="Bandák kezelése" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
-            </DockPanel>
-            
-            <DataGrid x:Name="dgBandak" Grid.Row="1" AutoGenerateColumns="True" ColumnWidth="*"/>
+            <Grid Grid.Row="0" Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="BandHub Admin" FontSize="26" FontWeight="Bold" FontFamily="Segoe UI Black" 
+                           Foreground="White" VerticalAlignment="Center"/>
+
+                <Button Grid.Column="1" Content="Kijelentkezés" Width="130" Height="35" Background="MediumPurple" Foreground="White"
+                FontWeight="Bold" Click="logout_Click" Margin="0,0,10,0"/>
+            </Grid>
+            <Border Grid.Row="1"
+            Width="350"
+            HorizontalAlignment="Left"
+            CornerRadius="8"
+            BorderBrush="MediumPurple"
+            BorderThickness="2"
+            Margin="0,0,0,10">
+
+                <TextBox x:Name="kereso" Height="40" FontSize="16" Padding="10" BorderThickness="0" Background="#1E1E1E" 
+                Foreground="White" VerticalContentAlignment="Center" Text="Keresés..."/>
+            </Border>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Bandák" FontSize="20" FontWeight="Bold" Foreground="White" 
+                HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Felhasználók" FontSize="20" FontWeight="Bold" Foreground="White" 
+                HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                <DataGrid x:Name="dgBandak" Grid.Row="1" Grid.Column="0" Margin="10,0,10,0" AutoGenerateColumns="True" ColumnWidth="*"/>
+                <DataGrid x:Name="dgFelhasznalok" Grid.Row="1" Grid.Column="1" Margin="10,0,10,0" AutoGenerateColumns="True" ColumnWidth="*"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
