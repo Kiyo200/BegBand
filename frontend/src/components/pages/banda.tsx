@@ -6,8 +6,8 @@ export default function BandaPage({ id }: { id?: number }) {
     <>
         <h1>Banda</h1>
         {id}
-        <Link to="/banda/posztEdit">edit</Link>
-        <Link to="/banda/poszt">view</Link>
+        <Link to="/posztEdit">edit</Link>
+        <Link to="/poszt">view</Link>
         <Outlet/>
     </>)
 }
