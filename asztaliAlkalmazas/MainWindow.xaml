@@ -48,57 +48,5 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Grid x:Name="mainAblak" Visibility="Collapsed" Margin="20">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0" Margin="0,0,0,15">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0" Text="BandHub Admin" FontSize="26" FontWeight="Bold" FontFamily="Segoe UI Black" 
-                           Foreground="White" VerticalAlignment="Center"/>
-
-                <Button Grid.Column="1" Content="Kijelentkezés" Width="130" Height="35" Background="MediumPurple" Foreground="White"
-                FontWeight="Bold" Click="logout_Click" Margin="0,0,10,0"/>
-            </Grid>
-            <Border Grid.Row="1"
-            Width="350"
-            HorizontalAlignment="Left"
-            CornerRadius="8"
-            BorderBrush="MediumPurple"
-            BorderThickness="2"
-            Margin="0,0,0,10">
-
-                <TextBox x:Name="kereso" Height="40" FontSize="16" Padding="10" BorderThickness="0" Background="#1E1E1E" 
-                Foreground="White" VerticalContentAlignment="Center" Text="Keresés..."/>
-            </Border>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Bandák" FontSize="20" FontWeight="Bold" Foreground="White" 
-                HorizontalAlignment="Center" Margin="0,0,0,10"/>
-
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Felhasználók" FontSize="20" FontWeight="Bold" Foreground="White" 
-                HorizontalAlignment="Center" Margin="0,0,0,10"/>
-
-                <DataGrid x:Name="dgBandak" Grid.Row="1" Grid.Column="0" Margin="10,0,10,0" AutoGenerateColumns="True" ColumnWidth="*"/>
-                <DataGrid x:Name="dgFelhasznalok" Grid.Row="1" Grid.Column="1" Margin="10,0,10,0" AutoGenerateColumns="True" ColumnWidth="*"/>
-            </Grid>
-        </Grid>
     </Grid>
 </Window>
