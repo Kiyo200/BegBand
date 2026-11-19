@@ -22,28 +22,9 @@ namespace asztaliAlkalmazas
         }
         private void login_Click(object sender, RoutedEventArgs e)
         {
-            showMain();
-        }
-
-        private void logout_Click(object sender, RoutedEventArgs e)
-        {
-            txtUsername.Clear();
-            txtPassword.Clear();
-            showLogin();
-        }
-
-        private void showMain()
-        {
-            loginAblak.Visibility = Visibility.Collapsed;
-            mainAblak.Visibility = Visibility.Visible;
-        }
-
-        private void showLogin()
-        {
-            txtUsername.Text = "";
-            txtPassword.Password = "";
-            mainAblak.Visibility = Visibility.Collapsed;
-            loginAblak.Visibility = Visibility.Visible;
+            AdminWindow admin = new AdminWindow();
+            admin.Show();
+            this.Close();
         }
 
     }
