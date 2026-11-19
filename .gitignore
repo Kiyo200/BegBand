@@ -7,3 +7,7 @@ node_modules
 **/.vs/
 bin/
 obj/
+
+# IntelliJ IDEA (gépenkénti beállítások, a dataSources-ban lehet jelszó is)
+.idea/
+*.iml
