@@ -23,6 +23,25 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+//start
+//nagy témát felbontani
+//scaleability
+
+
+
+//separation of concerns
+//auth
+//gui
+//
+
+//dto
+//dependency injection
+
+//kb 4 nagbb modell
+//modell // adatok
+//view // megjelenítés
+//modell // biznisz logika
+
 
 
 @Composable

@@ -7,22 +7,24 @@ import PosztEdit from "./components/pages/posztEdit.tsx";
 import Layout from "./components/Layout.tsx";
 import "./index.css"
 
+
+
+
+
 function App() {
     return (
-        <>
             <BrowserRouter>
                 <Routes>
                     <Route element={<Layout/>}>
                         <Route path="/" element={<RootPage/>}/>
                         <Route element={<BandaPage/>}>
-                            <Route path="/poszt" element={<PosztView/>}/>
-                            <Route path="/posztEdit" element={<PosztEdit/>}/>
+                            <Route path="/poszt/:id" element={<PosztView/>}/>
+                            <Route path="/posztEdit/:id" element={<PosztEdit/>}/>
                         </Route>
-                        <Route path="/felhasznalo" element={<FelhasznaloPage/>}/>
+                        <Route path="/felhasznalo/:id" element={<FelhasznaloPage/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>
-        </>
     )
 }
 
