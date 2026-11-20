@@ -1,0 +1,5 @@
+INSERT INTO public."Users" (id, username, email, password_hash, bio, avatar_url, role_id, status, created_at, updated_at) VALUES (1, 'admin', 'admin@bandhub.local', '$2a$12$YwctqBDv.f7XCVfrEwRd3.96z.AP7Ag7xCI619KxWzmzqa66AqEJK', NULL, NULL, 2, 'active', '2026-10-13 08:37:45.769389+00', NULL) ON CONFLICT DO NOTHING;
+INSERT INTO public."Users" (id, username, email, password_hash, bio, avatar_url, role_id, status, created_at, updated_at) VALUES (2, 'tester', 'tester@bandhub.local', '$2a$12$qgO/dEfrohEhkaXtWopE4Op2ije8ukVIcWtfbIOiiUYxwzWgh7r/C', NULL, NULL, 1, 'active', '2026-10-13 08:38:28.967217+00', NULL) ON CONFLICT DO NOTHING;
+INSERT INTO public."Users" (id, username, email, password_hash, bio, avatar_url, role_id, status, created_at, updated_at) VALUES (4, 'wasd', 'wasd@wasd.wasd', '$2a$10$3Mqtk6Db.4Q392.hGFL9A.u8rFXca8eQEvAsKM3d4zuB.P0VnvoWq', NULL, NULL, 1, 'active', '2026-11-17 09:14:04.521146+00', NULL) ON CONFLICT DO NOTHING;
+
+SELECT setval('public."Users_id_seq"', (SELECT COALESCE(MAX(id), 1) FROM public."Users"));

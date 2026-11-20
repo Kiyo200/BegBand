@@ -6,8 +6,31 @@ A BegBand Java backendje: Spring Boot 4, Java 21, PostgreSQL (Docker). Egyelőre
 
 1. **Adatbázis**: a repo gyökeréből `docker compose up -d`. Ez elindítja a `begband-db` Postgres konténert a `localhost:5433` porton.
 2. **Környezeti változók**: másold le a `.env.example`-t `.env` néven ide is és a repo gyökerébe is, és adj meg egy `DB_PASSWORD`-öt. A `.env` nem kerül gitbe.
-3. **Backend**: IntelliJ-ben futtasd a `main` osztályt, vagy innen: `./mvnw spring-boot:run`. A szerver a `http://localhost:8080` címen fut.
+3. **Backend**: IntelliJ-ben futtasd a `main` osztályt, vagy innen: `./mvnw spring-boot:run` (Windowson `mvnw.cmd spring-boot:run`). Kell hozzá Java 21 és beállított `JAVA_HOME`. A szerver a `http://localhost:8080` címen fut. Induláskor a Flyway létrehozza vagy frissíti az adatbázist (lásd lent).
 4. **Frontend**: `cd frontend && npm run dev`, aztán nyisd meg a `/register` vagy a `/login` oldalt.
+
+## Adatbázis-migrációk (Flyway)
+
+Az adatbázis sémája és a közös adatok a `src/main/resources/db/migration/` mappában vannak, számozott SQL-fájlokban:
+
+| Fájl | Tartalom |
+|---|---|
+| `V1__init.sql` | Teljes séma (táblák, típusok, kulcsok). |
+| `V2__seed.sql` | Szerepkörök (`Role`). |
+| `V3__test_users.sql` | Tesztfiókok: `admin`, `tester`, `wasd`. |
+
+A backend minden induláskor megnézi, hogy melyik fájl nem futott még le az adott gépen (ezt a `flyway_schema_history` táblában tartja számon), és csak azokat futtatja. Ezért **pull után elég újraindítani a backendet**, és megvannak a társaid változásai. Semmit nem kell törölni.
+
+**Új változtatás (új tábla, oszlop vagy közös adat):**
+1. Hozz létre egy új fájlt a következő számmal, pl. `V4__band_genre.sql`. A két aláhúzás kötelező.
+2. Indítsd el a backendet, és nézd meg, hogy lefut-e.
+3. Commit + push.
+
+**Szabályok:**
+- **Lefutott fájlt soha ne módosíts.** A Flyway ellenőrzőösszeget tárol róla, és ha eltér, a backend nem indul el. Javításhoz is új fájl kell.
+- Ha két ember ugyanazt a számot használja, a később pusholónak át kell számoznia a sajátját.
+- Gitbe csak tesztadat kerülhet, valódi felhasználói adat soha.
+- A regisztrációval felvitt userek csak a te gépeden lesznek meg. Ha a csapatnak is kell egy fiók, tedd bele egy migrációba.
 
 ## Felépítés
 
