@@ -4,7 +4,7 @@ using System.Text;
 
 namespace asztaliAlkalmazas
 {
-    internal class adatBazis
+    public class adatBazis
     {
     }
 }

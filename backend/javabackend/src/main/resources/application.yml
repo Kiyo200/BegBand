@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: begband-backend
+  config:
+
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:backend/javabackend/.env[.properties]
+  datasource:
+
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}?sslmode=${DB_SSLMODE:disable}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: ${PORT:8080}

@@ -1,0 +1,13 @@
+{
+  "name": "begband",
+  "private": true,
+  "scripts": {
+    "dev": "npm run db && concurrently -k -n backend,frontend -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "db": "docker start begband-db",
+    "dev:backend": "node scripts/backend.mjs",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}

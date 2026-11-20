@@ -1,0 +1,389 @@
+.auth-page {
+    --auth-bg: #f4f2fb;
+    --auth-surface: #ffffff;
+    --auth-ink: #17142a;
+    --auth-muted: #6b6785;
+    --auth-line: #e3e0f0;
+    --auth-field: #f8f7fd;
+    --auth-accent: #6d4aff;
+    --auth-accent-2: #ff4f9a;
+    --auth-accent-ink: #ffffff;
+    --auth-danger: #d93a5b;
+    --auth-success: #1f9d6b;
+    --auth-shadow: 0 30px 60px -20px rgba(42, 25, 110, 0.25), 0 12px 24px -12px rgba(42, 25, 110, 0.15);
+
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 48px 16px;
+    background:
+        radial-gradient(60rem 40rem at 10% -10%, rgba(109, 74, 255, 0.14), transparent 60%),
+        radial-gradient(50rem 35rem at 110% 110%, rgba(255, 79, 154, 0.12), transparent 60%),
+        var(--auth-bg);
+    color: var(--auth-ink);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    .auth-page {
+        --auth-bg: #0f0d1a;
+        --auth-surface: #1a1729;
+        --auth-ink: #f1effa;
+        --auth-muted: #9c97b8;
+        --auth-line: #2e2a45;
+        --auth-field: #14121f;
+        --auth-accent: #8b6dff;
+        --auth-danger: #ff6b88;
+        --auth-success: #3fd39a;
+        --auth-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+    }
+}
+
+.auth-shell {
+    width: 100%;
+    max-width: 440px;
+    background: var(--auth-surface);
+    border: 1px solid var(--auth-line);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: var(--auth-shadow);
+    animation: auth-rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes auth-rise {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.985);
+    }
+}
+
+.auth-card {
+    padding: 40px 44px;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-head {
+    margin: 28px 0 22px;
+}
+
+.auth-head h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--auth-ink);
+}
+
+.auth-head p {
+    margin: 6px 0 0;
+    color: var(--auth-muted);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-field label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--auth-ink);
+}
+
+.auth-input-wrap {
+    position: relative;
+}
+
+.auth-input-wrap input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--auth-line);
+    background: var(--auth-field);
+    color: var(--auth-ink);
+    font: inherit;
+    font-size: 0.97rem;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.auth-input-wrap input:hover {
+    border-color: color-mix(in srgb, var(--auth-accent) 35%, var(--auth-line));
+}
+
+.auth-input-wrap input:focus {
+    outline: none;
+    border-color: var(--auth-accent);
+    background: var(--auth-surface);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--auth-accent) 18%, transparent);
+}
+
+.auth-input-wrap:has(.auth-eye) input {
+    padding-right: 48px;
+}
+
+.auth-field.has-error input {
+    border-color: var(--auth-danger);
+}
+
+.auth-field.has-error input:focus {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--auth-danger) 18%, transparent);
+}
+
+.auth-error {
+    margin: 6px 0 0;
+    font-size: 0.82rem;
+    color: var(--auth-danger);
+    animation: auth-fade 0.2s ease both;
+}
+
+@keyframes auth-fade {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+}
+
+.auth-eye {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--auth-muted);
+    cursor: pointer;
+}
+
+.auth-eye:hover {
+    color: var(--auth-ink);
+    background: color-mix(in srgb, var(--auth-ink) 6%, transparent);
+}
+
+.auth-eye:focus-visible {
+    outline: 2px solid var(--auth-accent);
+}
+
+.auth-eye svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.auth-strength {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: -6px;
+}
+
+.auth-strength-bars {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+}
+
+.auth-strength-bars span {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--auth-line);
+    transition: background 0.25s;
+}
+
+.auth-strength-label {
+    min-width: 92px;
+    text-align: right;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--auth-muted);
+}
+
+.auth-strength.level-0 .on,
+.auth-strength.level-1 .on {
+    background: var(--auth-danger);
+}
+
+.auth-strength.level-2 .on {
+    background: #f0a020;
+}
+
+.auth-strength.level-3 .on,
+.auth-strength.level-4 .on {
+    background: var(--auth-success);
+}
+
+.auth-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.auth-check {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--auth-ink);
+    cursor: pointer;
+    user-select: none;
+}
+
+.auth-check input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.auth-check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 1.5px solid var(--auth-line);
+    background: var(--auth-field);
+    display: grid;
+    place-items: center;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.auth-check-box::after {
+    content: '';
+    width: 10px;
+    height: 6px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(1px, -1px) scale(0);
+    transition: transform 0.15s;
+}
+
+.auth-check input:checked + .auth-check-box {
+    background: var(--auth-accent);
+    border-color: var(--auth-accent);
+}
+
+.auth-check input:checked + .auth-check-box::after {
+    transform: rotate(-45deg) translate(1px, -1px) scale(1);
+}
+
+.auth-check input:focus-visible + .auth-check-box {
+    outline: 2px solid var(--auth-accent);
+    outline-offset: 2px;
+}
+
+.auth-link,
+
+.auth-link:hover,
+
+.auth-submit {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 50px;
+    margin-top: 6px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--auth-accent), color-mix(in srgb, var(--auth-accent) 60%, var(--auth-accent-2)));
+    color: var(--auth-accent-ink);
+    font: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--auth-accent) 70%, transparent);
+    transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+}
+
+.auth-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 14px 30px -10px color-mix(in srgb, var(--auth-accent) 75%, transparent);
+}
+
+.auth-submit:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.auth-submit:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--auth-accent) 40%, transparent);
+    outline-offset: 3px;
+}
+
+.auth-submit:disabled {
+    opacity: 0.75;
+    cursor: progress;
+}
+
+.auth-spinner {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: auth-spin 0.7s linear infinite;
+}
+
+@keyframes auth-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 820px) {
+    .auth-card {
+        padding: 32px 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-shell,
+    .auth-error {
+        animation: none;
+    }
+
+    .auth-submit {
+        transition: none;
+    }
+}
+
+.auth-secondary {
+    width: 100%;
+    height: 50px;
+    margin-top: 12px;
+    border: 1.5px solid var(--auth-line);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--auth-ink);
+    font: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.auth-secondary:hover {
+    border-color: var(--auth-accent);
+    background: color-mix(in srgb, var(--auth-accent) 6%, transparent);
+}
+
+.auth-secondary:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--auth-accent) 40%, transparent);
+    outline-offset: 3px;
+}
