@@ -6,28 +6,30 @@ import FelhasznaloPage from "./components/pages/felhasznalo.tsx";
 import RootPage from "./components/pages/root.tsx";
 import PosztView from "./components/pages/posztView.tsx";
 import PosztEdit from "./components/pages/posztEdit.tsx";
-import Labjegyzet from "./components/labjegyzet.tsx";
-import AuthPage from "./components/pages/auth.tsx";
+import Layout from "./components/Layout.tsx";
+import "./index.css"
+
+
+
+
 
 function App() {
-  return (
-    <>
-        <BrowserRouter>
-            <Routes>
-                <Route element={<><Header /><Outlet /><Labjegyzet/></>}>
-                    <Route path="/" element={<RootPage />} />
-                    <Route path="/banda" element={<BandaPage />} >
-                        <Route path="poszt" element={<PosztView/>}/>
-                        <Route path="posztEdit" element={<PosztEdit/>}/>
+    return (
+            <BrowserRouter>
+                <Routes>
+                    <Route element={<Layout/>}>
+                        <Route path="/" element={<RootPage/>}/>
+                        <Route element={<BandaPage/>}>
+                            <Route path="/poszt/:id" element={<PosztView/>}/>
+                            <Route path="/posztEdit/:id" element={<PosztEdit/>}/>
+                        </Route>
+                        <Route path="/felhasznalo/:id" element={<FelhasznaloPage/>}/>
+                        <Route path="/login" element={<AuthPage mode="login" />} />
+                        <Route path="/register" element={<AuthPage mode="register" />} />
                     </Route>
-                    <Route path="/felhasznalo" element={<FelhasznaloPage />} />
-                </Route>
-                <Route path="/login" element={<AuthPage mode="login" />} />
-                <Route path="/register" element={<AuthPage mode="register" />} />
-            </Routes>
-        </BrowserRouter>
-    </>
-  )
+                </Routes>
+            </BrowserRouter>
+    )
 }
 
 export default App
