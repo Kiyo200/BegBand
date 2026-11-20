@@ -1,4 +1,3 @@
-import './App.css'
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Header from "./components/header.tsx";
 import BandaPage from "./components/pages/banda.tsx";
