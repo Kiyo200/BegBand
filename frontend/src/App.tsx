@@ -6,6 +6,7 @@ import RootPage from "./components/pages/root.tsx";
 import PosztView from "./components/pages/posztView.tsx";
 import PosztEdit from "./components/pages/posztEdit.tsx";
 import Layout from "./components/Layout.tsx";
+import AuthPage from "./components/pages/auth.tsx";
 import "./index.css"
 
 
