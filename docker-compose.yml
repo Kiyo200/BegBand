@@ -11,7 +11,6 @@ services:
       - "127.0.0.1:5433:5432"
     volumes:
       - begband_pgdata:/var/lib/postgresql
-      - ./db/init:/docker-entrypoint-initdb.d:ro
 
 volumes:
   begband_pgdata:
