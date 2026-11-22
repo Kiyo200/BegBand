@@ -64,7 +64,11 @@
             HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
                 <DataGrid x:Name="dgBandak" Grid.Row="1" Grid.Column="0" Margin="10,0,10,0" AutoGenerateColumns="True" ColumnWidth="*"/>
-                <DataGrid x:Name="dgFelhasznalok" Grid.Row="1" Grid.Column="1" Margin="10,0,10,0" AutoGenerateColumns="True" ColumnWidth="*"/>
+                <DataGrid x:Name="dgFelhasznalok" Grid.Row="1" Grid.Column="1" Margin="10,0,10,0" AutoGenerateColumns="False" ColumnWidth="*">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Username}" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </Grid>
     </Grid>

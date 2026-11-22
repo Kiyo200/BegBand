@@ -20,6 +20,20 @@ namespace asztaliAlkalmazas
         public AdminWindow()
         {
             InitializeComponent();
+            loadData();
+            
+        }
+        private void loadData()
+        {
+            try
+            {  
+                dgFelhasznalok.ItemsSource = adatBazis.LoadUsers();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hiba az adatok beröltésekor:" + ex.Message);
+            }
         }
 
         private void logout_Click(object sender, RoutedEventArgs e)
