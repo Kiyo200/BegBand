@@ -1,5 +1,4 @@
 
-//const path = "/posztok/"
 
 
 export const MediaTipus = {
@@ -41,90 +40,53 @@ export type UjPoszt = {
     status:string;
 }
 
-export const posztLista: Poszt[] = [
-    {
+/*
+interface Dictionary {
+    [key: string]: Poszt;
+}
+
+const gyorsitotar:Dictionary = {
+    1:{
         id: 1,
-        cim: "Első próba az új dalhoz",
-        szoveg: "Ma este a próbateremben véglegesítjük az új dal refrénjét. Hamarosan mutatunk belőle egy részletet!",
+        cim: "Próba a hétvégén",
+        szoveg: "Szombaton 18 órától próbát tartunk a garázsban. Hozzátok a hangszereket és a jókedvet!",
         felhasznaloID: 1,
-        felhasznaloNev: "Anna",
+        felhasznaloNev: "Nagy Anna",
         bandaID: 1,
-        bandaNev: "Holdfény",
-        banaAvatarURL: "kép1.com",
-        kepURL: "https://placehold.co/600x400?text=Proba",
+        bandaNev: "Viharzóna",
+        banaAvatarURL: "/kepek/viharzona.jpg",
+        kepURL: "/kepek/proba.jpg",
         mediaURL: "",
-        posztMediaTipus: "none",
+        posztMediaTipus: MediaTipus.None,
         status: "publikus",
     },
-    {
+    2:{
         id: 2,
-        cim: "Élő felvétel a próbáról",
-        szoveg: "Egy rövid részlet a legutóbbi próbánkról. Mit gondoltok róla?",
+        cim: "Megjelent az új dalunk",
+        szoveg: "Fölkerült a legújabb számunk, a „Tavaszi zaj” a bandánk oldalára. Hallgassátok meg, és írjátok meg, mit gondoltok róla!",
         felhasznaloID: 2,
-        felhasznaloNev: "Márk",
+        felhasznaloNev: "Kovács Márk",
         bandaID: 2,
-        bandaNev: "Viharjel",
-        banaAvatarURL: "kép2.com",
-        kepURL: "https://placehold.co/600x400?text=Live",
-        mediaURL: "https://example.com/proba-felvetel.mp3",
-        posztMediaTipus: "audio",
+        bandaNev: "Késői Műszak",
+        banaAvatarURL: "/kepek/kesoimuszak.jpg",
+        kepURL: "",
+        mediaURL: "/media/tavaszi-zaj.mp3",
+        posztMediaTipus: MediaTipus.Audio,
         status: "publikus",
     },
-    {
+    3:{
         id: 3,
-        cim: "Találkozunk a koncerten!",
-        szoveg: "Szombaton 20:00-kor játszunk a klubban. Várunk mindenkit szeretettel!",
-        felhasznaloID: 1,
-        felhasznaloNev: "Anna",
+        cim: "Köszönjük a tegnap estét!",
+        szoveg: "Fantasztikus volt veletek a koncert a Dürer Kertben. Köszönjük mindenkinek, aki eljött és velünk énekelt!",
+        felhasznaloID: 3,
+        felhasznaloNev: "Tóth Lili",
         bandaID: 1,
-        bandaNev: "Holdfény",
-        banaAvatarURL: "kép3.com",
-        kepURL: "https://placehold.co/600x400?text=Koncert",
-        mediaURL: "https://example.com/koncert-elohivo.mp4",
-        posztMediaTipus: "video",
+        bandaNev: "Viharzóna",
+        banaAvatarURL: "/kepek/viharzona.jpg",
+        kepURL: "/kepek/koncert.jpg",
+        mediaURL: "/media/koncert-reszlet.mp4",
+        posztMediaTipus: MediaTipus.Video,
         status: "publikus",
     },
-];
-
-const path = "https://localhost3000/"
-
-//get poszt
-export async function getPoszt(id: number) {
-    const response = await fetch(path + id);
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    return response.json();
-
-
 }
-
-//put poszt
-export async function updatePoszt(id:number, poszt: Poszt) {
-    const response = await fetch(path+id,
-        {
-            method: 'PUT',
-            headers: {"content-type": "application/json"},
-
-            body: JSON.stringify({poszt: poszt})
-        });
-
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    return response.json();
-
-
-}
-
-export async function addPoszt(ujPoszt: UjPoszt) {
-    const response = await fetch(path,
-        {
-            method: "POST",
-            body: JSON.stringify(ujPoszt),
-        })
-    .then(res => res.json())
-    .catch(err => console.log(err));
-    return response;
-
-}
+ */

@@ -1,12 +1,11 @@
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import Header from "./components/header.tsx";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BandaPage from "./components/pages/banda.tsx";
 import FelhasznaloPage from "./components/pages/felhasznalo.tsx";
 import RootPage from "./components/pages/root.tsx";
-import PosztView from "./components/pages/posztView.tsx";
-import PosztEdit from "./components/pages/posztEdit.tsx";
+import PosztView from "./components/posztView.tsx";
+import PosztEdit from "./components/posztEdit.tsx";
 import Layout from "./components/Layout.tsx";
-import AuthPage from "./components/pages/auth.tsx";
+import AuthPage from "./components/pages/auth/auth.tsx";
 import "./index.css"
 
 

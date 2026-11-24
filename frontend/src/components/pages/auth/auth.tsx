@@ -1,6 +1,6 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, register, setUser } from '../../auth.ts';
+import { login, register, setUser } from '../../../auth.ts';
 import './auth.css';
 
 type Mode = 'login' | 'register';

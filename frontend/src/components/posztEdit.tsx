@@ -1,5 +1,5 @@
 import {useState, type ChangeEvent, type FormEvent} from "react";
-import {MediaTipus, type UjPoszt} from "../API/adatEloszto.tsx";
+import {MediaTipus, type UjPoszt} from "./API/adatEloszto.tsx";
 
 
 //kezelni kell az uj és a módosított posztokat külön
